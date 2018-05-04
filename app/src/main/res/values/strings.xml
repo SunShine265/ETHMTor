@@ -1,0 +1,54 @@
+<resources>
+    <string name="app_name">Flypool Monitor</string>
+    <string name="big_title_app">FlyPool</string>
+    <string name="small_title_app">ZCash Mining Pool</string>
+    <string name="btn_ok">OK</string>
+    <string name="immature_balance">Immature Balance</string>
+    <string name="current_hashrate">Current Hashrate</string>
+    <string name="average_hashrate">Average Hashrate</string>
+    <string name="hashrate">HASHRATE</string>
+    <string name="shares">SHARES</string>
+    <string name="upaid_balance">Unpaid Balance</string>
+    <string name="next_payout">Next Payout</string>
+    <string name="title_worker">Workers</string>
+    <string name="valid">Valid</string>
+    <string name="stale">Stale</string>
+    <string name="invalid">Invalid</string>
+    <string name="last_seen">Last Seen</string>
+    <string name="last_shares">Last Shares</string>
+    <string name="zcash">\u0020 ZCash</string>
+    <string name="btc">BTC</string>
+    <string name="usd">USD</string>
+    <string name="zec">ZEC</string>
+    <string name="zec_btc">ZEC/BTC</string>
+    <string name="zec_usd">ZEC/USD</string>
+    <string name="btc_usd">BTC/USD</string>
+    <string name="hour">Hour</string>
+    <string name="day">Day</string>
+    <string name="week">Week</string>
+    <string name="month">Month</string>
+    <string name="your_worker">Your workersBackup</string>
+    <string name="current">Current</string>
+    <string name="reported">Reported</string>
+    <string name="total">TOTAL</string>
+    <string name="pool_settings">Pool Settings</string>
+    <string name="email_address">Email Address</string>
+    <string name="payment_threshold">Payment Threshold</string>
+    <string name="worker_public_IP">Worker Public IP</string>
+    <string name="your_payouts">Your payouts</string>
+    <string name="duration">Duration</string>
+    <string name="TxHash">TxHash</string>
+    <string name="last">LAST</string>
+    <string name="eth_address">Address</string>
+    <string name="title_account">Account</string>
+    <!--change text account-->
+    <string name="unit_zec">\u0020 kH/s</string>
+    <string name="change_notification">notification when worker offline</string>
+    <string name="reported_hashrate_highlight">Reported Hashrate:\u0020</string>
+    <string name="current_hashrate_highlight">Current Hashrate:\u0020</string>
+    <string name="average_hashrate_highlight">Average Hashrate:\u0020</string>
+    <string name="worker_highlight">Worker:\u0020</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

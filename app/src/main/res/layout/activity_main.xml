@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.goodproductssoft.flypoolmonitor.activitys.MainActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <RelativeLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@color/background_header"
+                    android:paddingLeft="10dp">
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginRight="5dp"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
+                        android:src="@drawable/icon_zcash" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:text="@string/big_title_app"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="22dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/small_title_app"
+                            android:visibility="gone"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="12dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="bottom"
+                        android:orientation="horizontal">
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1" />
+
+                        <LinearLayout
+                            android:id="@+id/tab_settings"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:background="@color/background_selected">
+
+                            <ImageView
+                                android:id="@+id/btn_pool_settings"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:paddingTop="12dp"
+                                android:paddingBottom="12dp"
+                                android:src="@drawable/background_click_settings"
+                                android:clickable="true"
+                                android:gravity="center"
+                                android:scaleType="centerInside" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/tab_payouts"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:id="@+id/btn_payouts"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:paddingTop="12dp"
+                                android:paddingBottom="12dp"
+                                android:src="@drawable/background_click_payouts"
+                                android:clickable="true"
+                                android:gravity="center"
+                                android:scaleType="fitCenter"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/tab_workers"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent">
+
+                            <ImageView
+                                android:id="@+id/btn_worker"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:clickable="true"
+                                android:scaleType="fitCenter"
+                                android:paddingTop="12dp"
+                                android:paddingBottom="12dp"
+                                android:src="@drawable/background_click_worker" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/tab_miner"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:id="@+id/btn_miner"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:paddingTop="12dp"
+                                android:paddingBottom="12dp"
+                                android:src="@drawable/background_click_miner"
+                                android:clickable="true"
+                                android:gravity="center"
+                                android:scaleType="fitCenter" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/background_selected"
+                    class="com.goodproductssoft.minningpool.activitys.FragmentPoolSettings"
+                    android:id="@+id/fragment_content"/>
+            </LinearLayout>
+            <RelativeLayout
+                android:id="@+id/progressbar"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:background="#90000000">
+                <ProgressBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:indeterminateDrawable="@drawable/progress"
+                    android:indeterminate="true" />
+            </RelativeLayout>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#ff0000">
+        </RelativeLayout>
+    </LinearLayout>
+</RelativeLayout>

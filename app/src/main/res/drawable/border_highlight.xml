@@ -1,0 +1,7 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle" >
+    <solid android:color="@color/value_chart" />
+    <stroke android:width="1dip" android:color="@color/color_txt_average_hashrate"/>
+    <corners
+        android:radius="5dp"   >
+    </corners>
+</shape>
