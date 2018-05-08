@@ -25,7 +25,8 @@
                 android:gravity="center"
                 android:textStyle="bold"
                 android:textColor="@color/colorBlack"
-                android:textSize="10sp"/>
+                android:textSize="10sp"
+                android:text="@string/time"/>
             <TextView
                 android:id="@+id/timer"
                 android:layout_width="wrap_content"
@@ -39,6 +40,31 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/colorBlack"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="1dp"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginRight="4dp"
+                android:background="@drawable/circle_report"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/colorBlack"
+                android:textSize="10sp"
+                android:text="@string/reported_hashrate_highlight"/>
+            <TextView
+                android:id="@+id/value_report"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorBlack"
+                android:textSize="10sp"/>
+        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -84,6 +110,31 @@
                 android:text="@string/average_hashrate_highlight"/>
             <TextView
                 android:id="@+id/value_average"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorBlack"
+                android:textSize="10sp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="1dp"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginRight="4dp"
+                android:background="@drawable/circle_worker"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/colorBlack"
+                android:textSize="10sp"
+                android:text="@string/worker_highlight"/>
+            <TextView
+                android:id="@+id/value_worker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorBlack"

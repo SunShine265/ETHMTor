@@ -6,64 +6,117 @@
     android:orientation="horizontal">
 
     <TextView
-        android:id="@+id/your_worker"
+        android:id="@+id/your_payouts"
         android:layout_width="0dp"
-        android:layout_weight="1"
+        android:layout_weight="1.2"
         android:gravity="center"
-        android:layout_height="25dp"
+        android:layout_height="30dp"
         android:background="@color/item_listview"
         android:textColor="@color/colorWhite"
-        android:text="@string/your_worker"
-        android:textSize="10dp"
+        android:text=""
+        android:textSize="10sp"
+        android:ellipsize="marquee"
+        android:maxLines="2"
         android:layout_marginRight="1dp"
-        android:layout_marginBottom="2dp"
         android:textStyle="bold" />
-    <LinearLayout
-        android:id="@+id/ln_current"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="25dp"
-        android:gravity="center"
-        android:layout_marginRight="1dp"
-        android:layout_marginBottom="2dp"
-        android:background="@color/item_listview"
-        android:orientation="horizontal">
-        <TextView
-            android:id="@+id/currents"
-            android:layout_width="wrap_content"
-            android:gravity="center"
-            android:layout_marginRight="1dp"
-            android:layout_height="25dp"
-            android:textColor="@color/colorWhite"
-            android:textSize="10dp"/>
-    </LinearLayout>
+
     <LinearLayout
         android:id="@+id/ln_reported"
         android:layout_width="0dp"
         android:layout_weight="1"
-        android:layout_height="25dp"
+        android:layout_height="match_parent"
         android:gravity="center"
         android:layout_marginRight="1dp"
-        android:layout_marginBottom="2dp"
+        android:paddingTop="1dp"
         android:background="@color/item_listview"
-        android:orientation="horizontal">
+        android:orientation="vertical">
         <TextView
             android:id="@+id/reported"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginRight="1dp"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
             android:gravity="center"
             android:textColor="@color/colorWhite"
             android:textSize="10dp" />
+        <TextView
+            android:id="@+id/unit_reported"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:layout_marginTop="-1dp"
+            android:gravity="center"
+            android:textColor="@color/colorWhite"
+            android:textSize="9sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ln_current"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginRight="1dp"
+        android:layout_weight="1"
+        android:background="@color/item_listview"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingTop="1dp">
+
+        <TextView
+            android:id="@+id/currents"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text=""
+            android:textColor="@color/colorWhite"
+            android:textSize="10sp" />
+
+        <TextView
+            android:id="@+id/unit_currents"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-1dp"
+            android:gravity="center"
+            android:maxLines="1"
+            android:textColor="@color/colorWhite"
+            android:textSize="9sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ln_avg"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:layout_marginRight="1dp"
+        android:paddingTop="1dp"
+        android:background="@color/item_listview"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/avg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:gravity="center"
+            android:textColor="@color/colorWhite"
+            android:textSize="10sp" />
+        <TextView
+            android:id="@+id/unit_avg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:layout_marginTop="-1dp"
+            android:gravity="center"
+            android:textColor="@color/colorWhite"
+            android:textSize="9sp" />
     </LinearLayout>
     <LinearLayout
         android:id="@+id/ln_shares"
         android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="25dp"
+        android:layout_weight="1.5"
+        android:layout_height="match_parent"
         android:gravity="center"
         android:layout_marginRight="1dp"
-        android:layout_marginBottom="2dp"
+        android:paddingBottom="2dp"
         android:background="@color/item_listview"
         android:orientation="horizontal">
         <TextView
@@ -73,10 +126,10 @@
             android:gravity="center"
             android:layout_height="match_parent"
             android:textColor="@color/colorWhite"
-            android:text="@string/valid"
+            android:text=""
             android:lines="1"
             android:ellipsize="end"
-            android:textSize="10dp"/>
+            android:textSize="10sp"/>
 
         <TextView
             android:id="@+id/stale"
@@ -86,9 +139,9 @@
             android:gravity="center"
             android:lines="1"
             android:ellipsize="end"
-            android:text="@string/stale"
+            android:text=""
             android:textColor="@color/colorWhite"
-            android:textSize="10dp" />
+            android:textSize="10sp" />
 
         <TextView
             android:id="@+id/invalite"
@@ -97,19 +150,19 @@
             android:gravity="center"
             android:layout_height="match_parent"
             android:textColor="@color/colorWhite"
-            android:text="@string/invalid"
+            android:text=""
             android:lines="1"
             android:ellipsize="end"
-            android:textSize="10dp"/>
+            android:textSize="10sp"/>
     </LinearLayout>
     <LinearLayout
         android:id="@+id/ln_last_screen"
         android:layout_width="0dp"
         android:layout_weight="0.7"
-        android:layout_height="25dp"
+        android:layout_height="match_parent"
         android:gravity="center"
         android:layout_marginRight="1dp"
-        android:layout_marginBottom="2dp"
+        android:paddingBottom="2dp"
         android:background="@color/item_listview"
         android:orientation="horizontal">
         <TextView
@@ -118,7 +171,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:textColor="@color/colorWhite"
-            android:textSize="10dp"
+            android:textSize="10sp"
             android:layout_marginRight="1dp" />
         <TextView
             android:layout_width="wrap_content"
@@ -126,7 +179,7 @@
             android:gravity="center"
             android:textColor="@color/colorWhite"
             android:text="  m"
-            android:textSize="10dp"
+            android:textSize="10sp"
             android:layout_marginRight="1dp" />
         </LinearLayout>
 </LinearLayout>

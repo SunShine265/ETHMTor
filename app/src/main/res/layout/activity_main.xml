@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.goodproductssoft.flypoolmonitor.activitys.MainActivity">
+    tools:context="com.goodproductssoft.minningpool.activitys.MainActivity">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
         <RelativeLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
@@ -23,39 +27,39 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:background="@color/background_header"
-                    android:paddingLeft="10dp">
+                    android:orientation="horizontal"
+                    android:paddingLeft="8dp">
 
                     <android.support.v7.widget.AppCompatImageView
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        android:layout_marginRight="5dp"
-                        android:paddingTop="2dp"
-                        android:paddingBottom="2dp"
-                        android:src="@drawable/icon_zcash" />
+                        android:paddingBottom="5dp"
+                        android:paddingTop="5dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/icon_eth" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:text="@string/big_title_app"
-                            android:textColor="@color/colorWhite"
-                            android:textSize="22dp" />
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:visibility="visible">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/small_title_app"
-                            android:visibility="gone"
+                            android:text="@string/big_title_app"
                             android:textColor="@color/colorWhite"
-                            android:textSize="12dp" />
+                            android:textSize="20sp" />
+
+                        <!--<TextView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:text="@string/small_title_app2"-->
+                            <!--android:textColor="@color/colorWhite"-->
+                            <!--android:textSize="12dp" />-->
                     </LinearLayout>
 
                     <LinearLayout
@@ -144,7 +148,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/background_selected"
-                    class="com.goodproductssoft.minningpool.activitys.FragmentPoolSettings"
                     android:id="@+id/fragment_content"/>
             </LinearLayout>
             <RelativeLayout
@@ -164,8 +167,16 @@
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#ff0000">
+            android:layout_height="wrap_content">
+            <com.google.android.gms.ads.AdView
+                xmlns:ads="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/adView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                ads:adSize="SMART_BANNER"
+                ads:adUnitId="ca-app-pub-1827062885697339/3931937276">
+            </com.google.android.gms.ads.AdView>
         </RelativeLayout>
     </LinearLayout>
 </RelativeLayout>

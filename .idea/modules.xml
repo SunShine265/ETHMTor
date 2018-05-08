@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/FlypoolMonitor.iml" filepath="$PROJECT_DIR$/FlypoolMonitor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MinningPool.iml" filepath="$PROJECT_DIR$/MinningPool.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

@@ -1,16 +1,54 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <RelativeLayout
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginLeft="4dp"
+            android:visibility="gone"
+            android:layout_marginTop="10dp">
+            <TextView
+                android:id="@+id/id_miner_first"
+                android:layout_width="150dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="5dp"
+                android:background="@color/background_selected_chart"
+                android:gravity="center"
+                android:text="IDMiner First"
+                android:textColor="@color/colorWhite"
+                android:textSize="12dp" />
+
+            <TextView
+                android:id="@+id/id_miner_second"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:background="@color/background_unselected_chart"
+                android:gravity="center"
+                android:text="IDMiner Second"
+                android:textColor="@color/colorWhite"
+                android:textSize="12dp" />
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:visibility="gone"
+            android:background="@color/background_selected_chart"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:paddingLeft="4dp"
             android:paddingRight="4dp"
+            android:paddingLeft="4dp"
             android:paddingTop="10dp">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -32,9 +70,9 @@
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
                         android:paddingTop="2dp"
-                        android:text="@string/immature_balance"
+                        android:text="@string/reported_hashrate"
                         android:textAlignment="center"
-                        android:textColor="@color/colorBlack"
+                        android:textColor="@color/colorWhite"
                         android:textSize="11dp" />
 
                     <LinearLayout
@@ -42,17 +80,24 @@
                         android:layout_height="wrap_content"
                         android:background="@color/background_selected_chart"
                         android:orientation="horizontal"
+                        android:gravity="center_horizontal"
                         android:paddingBottom="7dp"
-                        android:paddingLeft="20dp"
                         android:paddingTop="7dp">
 
                         <TextView
-                            android:id="@+id/immature_hashrate"
+                            android:id="@+id/reported_hashrate"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text=" "
                             android:textColor="@color/color_txt_reported_hashrate"
-                            android:textSize="12dp" />
+                            android:textSize="14dp" />
+
+                        <TextView
+                            android:id="@+id/unit_reported"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="10dp" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -73,16 +118,16 @@
                         android:paddingTop="2dp"
                         android:text="@string/current_hashrate"
                         android:textAlignment="center"
-                        android:textColor="@color/colorBlack"
+                        android:textColor="@color/colorWhite"
                         android:textSize="11dp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
                         android:background="@color/background_selected_chart"
                         android:orientation="horizontal"
                         android:paddingBottom="7dp"
-                        android:paddingLeft="20dp"
                         android:paddingTop="7dp">
 
                         <TextView
@@ -91,7 +136,14 @@
                             android:layout_height="wrap_content"
                             android:text=""
                             android:textColor="@color/color_txt_current_hashrate"
-                            android:textSize="12dp" />
+                            android:textSize="14dp" />
+
+                        <TextView
+                            android:id="@+id/unit_current"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="10dp" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -112,16 +164,16 @@
                         android:paddingTop="2dp"
                         android:text="@string/average_hashrate"
                         android:textAlignment="center"
-                        android:textColor="@color/colorBlack"
+                        android:textColor="@color/colorWhite"
                         android:textSize="11dp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
                         android:background="@color/background_selected_chart"
                         android:orientation="horizontal"
                         android:paddingBottom="7dp"
-                        android:paddingLeft="20dp"
                         android:paddingTop="7dp">
 
                         <TextView
@@ -130,7 +182,14 @@
                             android:layout_height="wrap_content"
                             android:text=""
                             android:textColor="@color/color_txt_average_hashrate"
-                            android:textSize="12dp" />
+                            android:textSize="14dp" />
+
+                        <TextView
+                            android:id="@+id/unit_average"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="10dp" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -151,11 +210,11 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@color/background_selected_chart"
                         android:orientation="horizontal"
                         android:paddingBottom="2dp"
                         android:paddingLeft="6dp"
                         android:paddingRight="10dp"
-                        android:background="@color/background_selected_chart"
                         android:paddingTop="2dp">
 
                         <TextView
@@ -163,7 +222,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="@string/upaid_balance"
-                            android:textColor="@color/color_txt_current_hashrate"
+                            android:textColor="@color/upaid_balance"
                             android:textSize="12dp" />
 
                         <TextView
@@ -178,7 +237,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorWhite"
-                            android:text="@string/zec"
                             android:textSize="12dp" />
                     </LinearLayout>
 
@@ -197,7 +255,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="0.0"
-                                android:background="@color/color_txt_reported_hashrate"
+                                android:background="@color/next_payout"
                                 android:orientation="horizontal" />
                         </LinearLayout>
 
@@ -206,31 +264,36 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             android:paddingLeft="6dp"
-                            android:paddingRight="10dp">
+                            android:paddingRight="10dp"
+                            android:gravity="center_vertical">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
                                 android:text="@string/next_payout"
-                                android:textColor="@color/colorBlack"
+                                android:textColor="@color/colorWhite"
                                 android:textSize="12dp" />
 
                             <TextView
                                 android:id="@+id/time_next_payout"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text=""
                                 android:layout_centerHorizontal="true"
+                                android:layout_centerVertical="true"
+                                android:text=""
                                 android:textColor="@color/colorWhite"
                                 android:textSize="12dp" />
+
                             <TextView
                                 android:id="@+id/goal_day"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
                                 android:text=""
                                 android:textColor="@color/colorWhite"
-                                android:textSize="10dp"
-                                android:layout_alignParentRight="true" />
+                                android:textSize="10dp" />
                         </RelativeLayout>
                     </FrameLayout>
 
@@ -254,18 +317,40 @@
                         android:textSize="14dp" />
 
                     <TextView
-                        android:id="@+id/textView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/color_txt_average_hashrate"
+                        android:background="@color/color_txt_reported_hashrate"
                         android:text="@string/title_worker"
                         android:textAlignment="center"
                         android:textColor="@color/colorBlack"
                         android:textSize="10dp" />
                 </LinearLayout>
             </LinearLayout>
-
             <LinearLayout
+                android:id="@+id/show_chart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="4dp"
+                android:visibility="gone"
+                android:layout_marginBottom="4dp"
+                android:background="@color/background_selected_chart"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:text="Show Chart"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="@color/colorWhite"/>
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:src="@drawable/expand_chart_down"
+                    android:scaleType="fitCenter"/>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/view_chart"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginBottom="5dp"
@@ -318,7 +403,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/color_title_shares"
+                android:background="@color/colorRed"
                 android:orientation="horizontal"
                 android:paddingBottom="2dp"
                 android:paddingTop="2dp">
@@ -374,9 +459,10 @@
                 android:paddingTop="2dp">
 
                 <TextView
+                    android:id="@+id/textView4"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1.5"
+                    android:layout_weight="1.2"
                     android:text="@string/last_shares"
                     android:textAlignment="center"
                     android:textColor="@color/colorWhite"
@@ -386,7 +472,7 @@
                     android:id="@+id/valid_shares"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="1.2"
                     android:text=""
                     android:textSize="12dp"
                     android:lines="1"
@@ -398,11 +484,11 @@
                     android:id="@+id/stale_shares"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text=""
-                    android:textSize="12dp"
+                    android:layout_weight="1.2"
                     android:lines="1"
                     android:ellipsize="end"
+                    android:text=""
+                    android:textSize="12dp"
                     android:textAlignment="center"
                     android:textColor="@color/colorWhite" />
 
@@ -410,21 +496,18 @@
                     android:id="@+id/invalid_shares"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text=""
-                    android:textSize="12dp"
+                    android:layout_weight="1.2"
                     android:lines="1"
                     android:ellipsize="end"
+                    android:text=""
+                    android:textSize="12dp"
                     android:textAlignment="center"
                     android:textColor="@color/colorWhite" />
 
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="12dp"
-                    android:lines="1"
-                    android:ellipsize="end"
+                    android:layout_weight="0.7"
                     android:gravity="center">
 
                     <TextView
@@ -432,6 +515,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:lines="1"
+                        android:ellipsize="end"
                         android:textColor="@color/colorWhite" />
 
                     <TextView
@@ -448,7 +532,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingBottom="2dp"
+                android:paddingBottom="0dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
                 android:paddingTop="2dp">
@@ -466,7 +550,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/zec"
+                    android:text="@string/eth"
                     android:textAlignment="center"
                     android:textColor="@color/color_title_money"
                     android:textSize="14dp" />
@@ -495,10 +579,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingBottom="2dp"
+                android:paddingBottom="1dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:paddingTop="2dp">
+                android:paddingTop="1dp"
+                android:gravity="center_vertical">
 
                 <TextView
                     android:layout_width="0dp"
@@ -542,12 +627,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingBottom="2dp"
+                android:paddingBottom="1dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:paddingTop="2dp">
+                android:paddingTop="1dp"
+                android:gravity="center_vertical">
 
                 <TextView
+                    android:id="@+id/textView3"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1.5"
@@ -589,10 +676,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingBottom="2dp"
+                android:paddingBottom="1dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:paddingTop="2dp">
+                android:paddingTop="1dp"
+                android:gravity="center_vertical">
 
                 <TextView
                     android:layout_width="0dp"
@@ -636,13 +724,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:visibility="gone"
                 android:paddingBottom="2dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:paddingTop="2dp">
+                android:paddingTop="1dp"
+                android:visibility="gone">
 
                 <TextView
+                    android:id="@+id/textView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1.5"
@@ -699,7 +788,7 @@
                         android:background="@color/background_selected_chart"
                         android:paddingBottom="2dp"
                         android:paddingTop="2dp"
-                        android:text="@string/zec_btc"
+                        android:text="@string/eth_btc"
                         android:textAlignment="center"
                         android:textColor="@color/colorWhite"
                         android:textSize="11dp" />
@@ -707,11 +796,11 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/color_txt_average_hashrate"
+                        android:background="@color/background_grey"
                         android:gravity="center"
                         android:orientation="horizontal"
-                        android:paddingBottom="5dp"
-                        android:paddingTop="5dp">
+                        android:paddingBottom="3dp"
+                        android:paddingTop="3dp">
 
                         <TextView
                             android:id="@+id/eth_btc"
@@ -737,7 +826,7 @@
                         android:background="@color/background_selected_chart"
                         android:paddingBottom="2dp"
                         android:paddingTop="2dp"
-                        android:text="@string/zec_usd"
+                        android:text="@string/eth_usd"
                         android:textAlignment="center"
                         android:textColor="@color/colorWhite"
                         android:textSize="11dp" />
@@ -745,11 +834,11 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/color_txt_average_hashrate"
+                        android:background="@color/background_grey"
                         android:gravity="center"
                         android:orientation="horizontal"
-                        android:paddingBottom="5dp"
-                        android:paddingTop="5dp">
+                        android:paddingBottom="3dp"
+                        android:paddingTop="3dp">
 
                         <TextView
                             android:id="@+id/eth_usd"
@@ -783,11 +872,11 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/background_grey"
+                        android:background="@color/color_txt_average_hashrate"
                         android:gravity="center"
                         android:orientation="horizontal"
-                        android:paddingBottom="5dp"
-                        android:paddingTop="5dp">
+                        android:paddingBottom="3dp"
+                        android:paddingTop="3dp">
 
                         <TextView
                             android:id="@+id/btc_usd"
@@ -800,18 +889,18 @@
             </LinearLayout>
         </LinearLayout>
         <!--<RelativeLayout-->
-            <!--android:id="@+id/progressbar"-->
-            <!--android:visibility="gone"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:background="#90000000">-->
-            <!--<ProgressBar-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_centerInParent="true"-->
-                <!--android:indeterminateDrawable="@drawable/progress"-->
-                <!--android:indeterminate="true" />-->
+        <!--android:id="@+id/progressbar"-->
+        <!--android:visibility="gone"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:background="#90000000">-->
+        <!--<ProgressBar-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:indeterminateDrawable="@drawable/progress"-->
+        <!--android:indeterminate="true" />-->
         <!--</RelativeLayout>-->
-    </RelativeLayout>
+    </LinearLayout>
 
 </FrameLayout>

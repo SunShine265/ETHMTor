@@ -1,4 +1,5 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -27,7 +28,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginRight="1dp"
                     android:layout_weight="2"
-                    android:background="@color/background_header"
+                    android:background="@color/color_worker"
                     android:gravity="center"
                     android:text="@string/your_payouts"
                     android:textColor="@color/colorWhite"
@@ -40,7 +41,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginRight="1dp"
                     android:layout_weight="1"
-                    android:background="@color/background_header"
+                    android:background="@color/color_worker"
                     android:gravity="center"
                     android:text="@string/duration"
                     android:textColor="@color/colorWhite"
@@ -52,7 +53,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginRight="1dp"
                     android:layout_weight="2"
-                    android:background="@color/background_header"
+                    android:background="@color/color_worker"
                     android:gravity="center"
                     android:text="@string/TxHash"
                     android:textColor="@color/colorWhite"
@@ -62,10 +63,10 @@
                     android:id="@+id/last_screen"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@color/background_header"
+                    android:layout_weight="0.7"
+                    android:background="@color/color_worker"
                     android:gravity="center"
-                    android:text="@string/zec"
+                    android:text="@string/eth_title"
                     android:textColor="@color/colorWhite"
                     android:textSize="10dp" />
             </LinearLayout>
@@ -82,7 +83,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginRight="1dp"
                     android:layout_weight="2"
-                    android:background="#7F7F7F"
+                    android:background="#7E7F81"
                     android:orientation="horizontal">
 
                     <TextView
@@ -92,7 +93,7 @@
                         android:layout_marginRight="10dp"
                         android:gravity="center"
                         android:text="@string/last"
-                        android:textColor="#262626"
+                        android:textColor="@color/colorPrimary"
                         android:textSize="10dp" />
 
                     <TextView
@@ -101,10 +102,10 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginRight="5dp"
-                        android:background="@color/color_txt_average_hashrate"
+                        android:background="@color/colorPrimary"
                         android:gravity="center"
                         android:padding="3dp"
-                        android:textColor="#262626"
+                        android:textColor="@color/colorWhite"
                         android:textSize="8dp" />
                 </LinearLayout>
 
@@ -124,15 +125,15 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="0"
-                        android:textColor="#262626"
+                        android:textColor="@color/colorWhite"
                         android:textSize="10dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text=" h"
-                        android:textColor="#262626"
+                        android:text=" d"
+                        android:textColor="@color/colorWhite"
                         android:textSize="10dp" />
                 </LinearLayout>
 
@@ -168,7 +169,7 @@
                     android:layout_weight="0.7"
                     android:background="#7E7F81"
                     android:gravity="center"
-                    android:textColor="#262626"
+                    android:textColor="@color/colorWhite"
                     android:textSize="10dp" />
             </LinearLayout>
 
@@ -181,7 +182,6 @@
                 android:id="@+id/list"
                 android:layout_width="fill_parent"
                 android:layout_height="0dp"
-                android:dividerHeight="2dp"
                 android:layout_weight="1" />
         </LinearLayout>
         <!--<RelativeLayout-->
