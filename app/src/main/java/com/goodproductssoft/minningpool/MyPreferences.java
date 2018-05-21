@@ -3,70 +3,144 @@ package com.goodproductssoft.minningpool;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.goodproductssoft.minningpool.activitys.MainActivity;
+import com.goodproductssoft.minningpool.activities.MainActivity;
 import com.goodproductssoft.minningpool.models.IdSuggestsion;
 import com.goodproductssoft.minningpool.models.Miner;
-import com.goodproductssoft.minningpool.models.YourWorkerNotify;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by user on 5/11/2017.
  */
 
 public final class MyPreferences {
+    private Context mContext;
+
     public static final String PREFS_NAME = "ETHERMINE_APP";
     public final static String ID = "ID";
     public final static String IDMINER= "IDMINER";
     public final static String ID_SUGGESTSION= "ID_SUGGESTSION";
     public final static String SHOW_ADS_REMAIN_TIMES= "SHOW_ADS_REMAIN_TIMES";
+    public final static String SHOW_RATE_REMAIN_TIMES= "SHOW_RATE_REMAIN_TIMES";
+    public final static String REMOVE_ADS = "REMOVE_ADS";
+    public final static String VIEW_MODES = "VIEW_MODES";
+    public final static String RATE_US_TO_STARS = "RATE_US_TO_STARS";
 
-    public final static String YOUR_WORKER_OFF = "YOUR_WORKER_OFF";
-
-    public MyPreferences() {
-        super();
+    private static MyPreferences myPreferences;
+    public final static MyPreferences getInstance() {
+        if(myPreferences == null){
+            myPreferences = new MyPreferences(CustomApp.getInstance());
+        }
+        return myPreferences;
     }
 
-    public static void setID(String value, Context context){
-        SharedPreferences token = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        SharedPreferences.Editor edit = token.edit();
-        edit.putString(ID, value);
-        edit.commit();
+    public MyPreferences(Context context) {
+        mContext = context;
     }
 
-    public  String getID(Context context){
-        SharedPreferences preferences = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        return preferences.getString(ID, "");
+    private SharedPreferences getSharedPreferences(){
+        try {
+            return mContext.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        }
+        catch (Exception ex){
+            return CustomApp.getInstance().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        }
     }
 
-    public void setShowAdsRemainTimes(Context context, long times){
+    public void setRemoveAds(boolean value){
         SharedPreferences settings;
         SharedPreferences.Editor editor;
 
-        settings = context.getSharedPreferences(PREFS_NAME, context.MODE_PRIVATE);
+        settings = getSharedPreferences();
+        editor = settings.edit();
+        editor.putBoolean(REMOVE_ADS, value);
+        editor.commit();
+    }
+
+    public boolean getRemoveAds(){
+        SharedPreferences settings;
+        settings = getSharedPreferences();
+        boolean removeAds = settings.getBoolean(REMOVE_ADS, false);
+        return removeAds;
+    }
+
+    public void setRateUsToStars(boolean value){
+        SharedPreferences settings;
+        SharedPreferences.Editor editor;
+
+        settings = getSharedPreferences();
+        editor = settings.edit();
+        editor.putBoolean(RATE_US_TO_STARS, value);
+        editor.commit();
+    }
+
+    public boolean getRateUsToStars(){
+        SharedPreferences settings;
+        settings = getSharedPreferences();
+        boolean rateUsToStars = settings.getBoolean(RATE_US_TO_STARS, false);
+        return rateUsToStars;
+    }
+
+    public void setViewModes(int value){
+        SharedPreferences settings;
+        SharedPreferences.Editor editor;
+
+        settings = getSharedPreferences();
+        editor = settings.edit();
+        editor.putInt(VIEW_MODES, value);
+        editor.commit();
+    }
+
+    public int getViewModes(){
+        SharedPreferences settings;
+        settings = getSharedPreferences();
+        int viewModes = settings.getInt(VIEW_MODES, 0);
+        return viewModes;
+    }
+
+    public void setShowRateRemainTimes(long times){
+        SharedPreferences settings;
+        SharedPreferences.Editor editor;
+
+        settings = getSharedPreferences();
+        editor = settings.edit();
+        editor.putLong(SHOW_RATE_REMAIN_TIMES, times);
+        editor.commit();
+    }
+
+    public long getShowRateRemainTimes(){
+        SharedPreferences settings;
+        settings = getSharedPreferences();
+        long remainTimes = settings.getLong(SHOW_RATE_REMAIN_TIMES, MainActivity.SHOW_RATE_REMAIN_TIMES);
+        return remainTimes;
+    }
+
+    public void setShowAdsRemainTimes(long times){
+        SharedPreferences settings;
+        SharedPreferences.Editor editor;
+
+        settings = getSharedPreferences();
         editor = settings.edit();
         editor.putLong(SHOW_ADS_REMAIN_TIMES, times);
         editor.commit();
     }
 
-
-    public long getShowAdsRemainTimes(Context context){
+    public long getShowAdsRemainTimes(){
         SharedPreferences settings;
-        settings = context.getSharedPreferences(PREFS_NAME, context.MODE_PRIVATE);
-        long remainTimes = settings.getLong(SHOW_ADS_REMAIN_TIMES, MainActivity.MAX_SHOW_ADS_REMAIN_TIMES);
+        settings = getSharedPreferences();
+        long remainTimes = settings.getLong(SHOW_ADS_REMAIN_TIMES, MainActivity.SHOW_RATE_REMAIN_TIMES + 5);
         return remainTimes;
     }
 
-    public void SaveIdSuggestsions(Context context, List<IdSuggestsion> objects){
+    public void SaveIdSuggestsions(List<IdSuggestsion> objects){
         SharedPreferences settings;
         SharedPreferences.Editor editor;
 
-        settings = context.getSharedPreferences(PREFS_NAME, context.MODE_PRIVATE);
+        settings = getSharedPreferences();
         editor = settings.edit();
         Gson gson = new Gson();
         String jsonIdMiner = gson.toJson(objects);
@@ -74,10 +148,10 @@ public final class MyPreferences {
         editor.commit();
     }
 
-    public ArrayList<IdSuggestsion> GetIdSuggestsions(Context context){
+    public ArrayList<IdSuggestsion> GetIdSuggestsions(){
         SharedPreferences settings;
         List<IdSuggestsion> idSuggestsionses;
-        settings = context.getSharedPreferences(PREFS_NAME, context.MODE_PRIVATE);
+        settings = getSharedPreferences();
         if(settings.contains(ID_SUGGESTSION)){
             String jsonIdSuggestsions = settings.getString(ID_SUGGESTSION, null);
             Gson gson = new Gson();
@@ -90,58 +164,11 @@ public final class MyPreferences {
         return (ArrayList<IdSuggestsion>) idSuggestsionses;
     }
 
-    public static void SaveYourWorkerOff(ArrayList<YourWorkerNotify> value, Context context){
+    private void SaveIdMiners(List<Miner> objects){
         SharedPreferences settings;
         SharedPreferences.Editor editor;
 
-        settings = context.getSharedPreferences(PREFS_NAME,
-                Context.MODE_PRIVATE);
-        editor = settings.edit();
-
-        Gson gson = new Gson();
-        String jsonIdMiner = gson.toJson(value);
-        editor.putString(YOUR_WORKER_OFF, jsonIdMiner);
-        editor.commit();
-    }
-
-    public  ArrayList<YourWorkerNotify> getYourWorkerOff(Context context){
-        SharedPreferences settings;
-        List<YourWorkerNotify> yourWorkers;
-        settings = context.getSharedPreferences(PREFS_NAME, context.MODE_PRIVATE);
-        if(settings.contains(YOUR_WORKER_OFF)){
-            String jsonYourWorkerOff = settings.getString(YOUR_WORKER_OFF, null);
-            Gson gson = new Gson();
-//            YourWorkerOff yourWorkerOff = gson.fromJson(jsonYourWorkerOff, YourWorkerOff.class);
-//            yourWorker = yourWorkerOff;
-            YourWorkerNotify[] youWotkerItems = gson.fromJson(jsonYourWorkerOff, YourWorkerNotify[].class);
-            yourWorkers = Arrays.asList(youWotkerItems);
-            yourWorkers = new ArrayList<YourWorkerNotify>(yourWorkers);
-        }
-        else
-            return null;
-        return (ArrayList<YourWorkerNotify>) yourWorkers;
-    }
-
-    public void AddYourWorkerOff(Context context, YourWorkerNotify yourWorkerNotify){
-        ArrayList<YourWorkerNotify> yourWorkerNotifies = new ArrayList<YourWorkerNotify>();
-        yourWorkerNotifies.add(yourWorkerNotify);
-        SaveYourWorkerOff(yourWorkerNotifies, context);
-    }
-
-    public void RemoveYourWorkerOff(Context context, Miner miner){
-        ArrayList<Miner> miners = GetIdMiners(context);
-        if(miners != null){
-            miners.remove(miner);
-            SaveIdMiners(context, miners);
-        }
-    }
-
-    private void SaveIdMiners(Context context, List<Miner> objects){
-        SharedPreferences settings;
-        SharedPreferences.Editor editor;
-
-        settings = context.getSharedPreferences(PREFS_NAME,
-                Context.MODE_PRIVATE);
+        settings = getSharedPreferences();
         editor = settings.edit();
 
         Gson gson = new Gson();
@@ -150,24 +177,28 @@ public final class MyPreferences {
         editor.commit();
     }
 
-    public void AddIdMiner(Context context, Miner miner){
+    public void AddIdMiner(Miner miner){
         List<Miner> miners = new ArrayList<Miner>();
-//        List<Miner> miners = GetIdMiners(context);
+//        List<Miner> miners = GetIdMiners();
 //        if(miners == null){
 //            miners = new ArrayList<Miner>();
 //        }
         miners.add(miner);
-        SaveIdMiners(context, miners);
+        SaveIdMiners(miners);
     }
 
-    public void UpdateMiner(Context context, Miner miner){
-        ArrayList<Miner> miners = GetIdMiners(context);
-        if (miners != null) {
-            for (int i = 0; i < miners.size(); i++) {
-                if (miners.get(i) == null
-                    || miners.get(i).getId() == null
-                    || miners.get(i).getId().isEmpty()){
-                    miners.remove(miners.get(i));
+    public void UpdateMiner(Miner miner){
+        if (miner != null) {
+            ArrayList<Miner> miners = GetIdMiners();
+            if(miners == null){
+                miners = new ArrayList<>();
+            }
+            ArrayList<Miner> removeMiners = new ArrayList<>(miners);
+            for (Miner removeMiner : removeMiners) {
+                if (removeMiner == null
+                        || removeMiner.getId() == null
+                        || removeMiner.getId().isEmpty()){
+                    miners.remove(removeMiner);
                 }
             }
 
@@ -180,26 +211,14 @@ public final class MyPreferences {
                 }
             }
 
-            SaveIdMiners(context, miners);
+            SaveIdMiners(miners);
         }
     }
 
-    public void RemoveAll(Context context){
-        ArrayList<Miner> miners = new ArrayList<>();
-        SaveIdMiners(context, miners);
-//        ArrayList<Miner> miners = GetIdMiners(context);
-//        if(miners != null){
-//            for (int i = 0; i < miners.size(); i++){
-//                miners.remove(miners.get(i));
-//            }
-//            SaveIdMiners(context, miners);
-//        }
-    }
-
-    public ArrayList<Miner> GetIdMiners(Context context){
+    public ArrayList<Miner> GetIdMiners(){
         SharedPreferences settings;
         ArrayList<Miner> miners = new ArrayList<Miner>();
-        settings = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        settings = getSharedPreferences();
         if(settings.contains(IDMINER)){
             String jsonIdMiner = settings.getString(IDMINER, null);
             if(jsonIdMiner != null) {

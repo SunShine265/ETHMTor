@@ -1,8 +1,12 @@
 package com.goodproductssoft.minningpool.controls;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Canvas;
+import android.os.Build;
 import android.text.format.DateFormat;
+import android.view.ViewTreeObserver;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.Chart;
@@ -38,17 +42,29 @@ public class CustomMarkerView extends MarkerView {
                             ArrayList<Entry> valueCurrents, ArrayList<Entry> valueAverages,
                             ArrayList<Entry> valueWorkers) {
         super(activity, layoutResource);
-        value_report = (TextView) findViewById(R.id.value_report);
-        value_current = (TextView) findViewById(R.id.value_current);
-        value_average = (TextView) findViewById(R.id.value_average);
-        value_worker = (TextView) findViewById(R.id.value_worker);
-        timer = (TextView) findViewById(R.id.timer);
+        value_report = findViewById(R.id.value_report);
+        value_current = findViewById(R.id.value_current);
+        value_average = findViewById(R.id.value_average);
+        value_worker = findViewById(R.id.value_worker);
+        timer = findViewById(R.id.timer);
         this.yValueReports = valueReports;
         this.yValueCurrents = valueCurrents;
         this.yValueAverages = valueAverages;
         this.yValueWorkers = valueWorkers;
         uiScreenWidth = getResources().getDisplayMetrics().widthPixels;
         uiScreenHeight = getResources().getDisplayMetrics().heightPixels;
+
+        ViewTreeObserver viewTreeObserver = CustomMarkerView.this.getViewTreeObserver();
+        if (viewTreeObserver.isAlive()) {
+            viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                        CustomMarkerView.this.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    }
+                }
+            });
+        }
     }
 
     @Override
@@ -119,13 +135,34 @@ public class CustomMarkerView extends MarkerView {
 
     @Override
     public void draw(Canvas canvas, float posX, float posY) {
-        int w = getWidth();
-        if((uiScreenWidth-posX-60) < w) {
-            posX -= w;
+//        int w = getWidth();
+//        if((uiScreenWidth-posX-60) < w) {
+//            posX -= w;
+//        }
+//        posY = 100;
+//        canvas.translate(posX, posY);
+//        draw(canvas);
+        Context activity = CustomMarkerView.this.getContext();
+        if(activity != null){
+            if(activity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+                int w = getWidth();
+                if(((((uiScreenWidth)*3)/7)-posX - 45) < w) {
+                    posX -= w;
+                }
+                posY = 100;
+                canvas.translate(posX, posY);
+                draw(canvas);
+            }
+            else {
+                int w = getWidth();
+                if((uiScreenWidth-posX) - 90 < w) {
+                    posX -= w;
+                }
+                posY = 100;
+                canvas.translate(posX, posY);
+                draw(canvas);
+            }
         }
-        posY = 100;
-        canvas.translate(posX, posY);
-        draw(canvas);
     }
     public String ChangeHashrateUnit(float value){
         String strTempValue = new DecimalFormat("#.##").format(value) + " H/s";

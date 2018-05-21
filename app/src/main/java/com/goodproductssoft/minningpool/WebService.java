@@ -11,5 +11,20 @@ import retrofit2.http.Path;
 
 public interface WebService {
     @GET("/miner/{id}/settings")
-    Call<ResponseBody> getPoolSetings(@Path("id") String id);//function to call api
+    Call<ResponseBody> GetPoolSetings(@Path("id") String id);//function to call api
+
+    @GET("/miner/{id}/currentStats")
+    Call<ResponseBody> GetCurrentStats(@Path("id") String id);//function to call api
+
+    @GET("/miner/{id}/history")
+    Call<ResponseBody> GetHistory(@Path("id") String id);//function to call api
+
+    @GET("/miner/{id}/payouts")
+    Call<ResponseBody> GetPayouts(@Path("id") String id);//function to call api
+
+    @GET("/miner/{id}/Settings")
+    Call<ResponseBody> GetSettings(@Path("id") String id);//function to call api
+
+    @GET("/miner/{id}/workers")
+    Call<ResponseBody> GetWorkers(@Path("id") String id);//function to call api
 }

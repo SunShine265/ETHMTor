@@ -38,10 +38,10 @@ public class PayoutAdapter extends ArrayAdapter<Payouts> {
         if(convertView == null){
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_payouts, null);
         }
-        your_payouts = (TextView)convertView.findViewById(R.id.your_payouts);
-        duration = (TextView)convertView.findViewById(R.id.duration);
-        txhash = (TextView)convertView.findViewById(R.id.txhash);
-        count_coin = (TextView)convertView.findViewById(R.id.count_coin);
+        your_payouts = convertView.findViewById(R.id.your_payouts);
+        duration = convertView.findViewById(R.id.duration);
+        txhash = convertView.findViewById(R.id.txhash);
+        count_coin = convertView.findViewById(R.id.count_coin);
         your_payouts.setText(item.getPaidOn());
         duration.setText(item.getDuration());
 //        txhash.setText(item.getTxHash());

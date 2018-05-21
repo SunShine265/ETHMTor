@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
@@ -49,20 +50,21 @@ public class IdMinerAdapter extends ArrayAdapter<Miner> {
         Miner item = data.get(position);
         TextView id_miner, email, payout, ip, title_type_coin, edit_miner_settings;
         ImageView btn_delete_id_miner;
-        Switch id_on_off_notification, id_send_email;
+        Switch id_on_off_notification;
+        CheckBox id_send_email;
 
-        id_miner = (TextView) convertView.findViewById(R.id.id_miner);
-        title_coin = (TextView) convertView.findViewById(R.id.title_coin);
-        btn_delete_id_miner = (ImageView)convertView.findViewById(R.id.btn_delete_id_miner);
-        title_type_coin = (TextView) convertView.findViewById(R.id.title_type_coin);
-        email = (TextView) convertView.findViewById(R.id.email);
-        payout = (TextView) convertView.findViewById(R.id.payout);
-        ip = (TextView) convertView.findViewById(R.id.ip);
-        id_on_off_notification = (Switch)convertView.findViewById(R.id.id_on_off_notification);
-        id_send_email = (Switch) convertView.findViewById(R.id.id_send_email);
-        edit_miner_settings = (TextView) convertView.findViewById(R.id.edit_miner_settings);
-        myPreferences = new MyPreferences();
-        miners = myPreferences.GetIdMiners(context);
+        id_miner = convertView.findViewById(R.id.id_miner);
+        title_coin = convertView.findViewById(R.id.title_coin);
+        btn_delete_id_miner = convertView.findViewById(R.id.btn_delete_id_miner);
+        title_type_coin = convertView.findViewById(R.id.title_type_coin);
+        email = convertView.findViewById(R.id.email);
+        payout = convertView.findViewById(R.id.payout);
+        ip = convertView.findViewById(R.id.ip);
+        id_on_off_notification = convertView.findViewById(R.id.id_on_off_notification);
+        id_send_email = convertView.findViewById(R.id.id_send_email);
+        edit_miner_settings = convertView.findViewById(R.id.edit_miner_settings);
+        myPreferences = MyPreferences.getInstance();
+        miners = myPreferences.GetIdMiners();
         minerIsActive = GetMinerIdActive();
 
         //id_miner.setText(item.getId());
@@ -94,11 +96,11 @@ public class IdMinerAdapter extends ArrayAdapter<Miner> {
 
         if(id_on_off_notification.isChecked()){
             minerIsActive.setNotification(true);
-            myPreferences.UpdateMiner(getContext(), minerIsActive);
+            myPreferences.UpdateMiner(minerIsActive);
         }
         else {
             minerIsActive.setNotification(false);
-            myPreferences.UpdateMiner(getContext(), minerIsActive);
+            myPreferences.UpdateMiner(minerIsActive);
         }
         //update Ui switch
         if(item.isNotification()){
@@ -111,11 +113,11 @@ public class IdMinerAdapter extends ArrayAdapter<Miner> {
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if(isChecked){
                     minerIsActive.setNotification(true);
-                    myPreferences.UpdateMiner(getContext(), minerIsActive);
+                    myPreferences.UpdateMiner(minerIsActive);
                 }
                 else {
                     minerIsActive.setNotification(false);
-                    myPreferences.UpdateMiner(getContext(), minerIsActive);
+                    myPreferences.UpdateMiner(minerIsActive);
                 }
             }
         });
@@ -133,16 +135,19 @@ public class IdMinerAdapter extends ArrayAdapter<Miner> {
         else
             id_send_email.setChecked(true);
         String urlURLEditSettings = "";
+        String linkedTextEditSetting = "";
         if(item.getType() == Miner.CoinType.ETH){
             urlURLEditSettings = "https://ethermine.org/miners/" + item.getId() + "/settings";
+            linkedTextEditSetting = String.format("<a href=\"%s\"> " + "Edit on ethermine.org"  + " </a> ", urlURLEditSettings);
         }
         else if(item.getType() == Miner.CoinType.ETC){
             urlURLEditSettings = "https://etc.ethermine.org/miners/" + item.getId() + "/settings";
+            linkedTextEditSetting = String.format("<a href=\"%s\">" + "Edit on etc.ethermine.org" + " </a> ", urlURLEditSettings);
         }
         else {
             urlURLEditSettings = "https://zcash.flypool.org/miners/" + item.getId() + "/settings";
+            linkedTextEditSetting = String.format("<a href=\"%s\">" + "Edit on zcash.flypool.org" + "</a> ", urlURLEditSettings);
         }
-        String linkedTextEditSetting = String.format("<a href=\"%s\"> Edit </a> ", urlURLEditSettings);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             edit_miner_settings.setText(Html.fromHtml(linkedTextEditSetting, Html.FROM_HTML_MODE_LEGACY));

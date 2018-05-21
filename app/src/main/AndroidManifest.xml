@@ -6,23 +6,45 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="com.android.vending.BILLING" />
+
 
     <application
+        android:name=".CustomApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:largeHeap="true"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:hardwareAccelerated="false"
         android:theme="@style/AppTheme">
-        <activity android:name=".activitys.MainActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait">
+        <activity android:name=".activities.MainActivity"
+            android:configChanges="orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name="com.applovin.adview.AppLovinInterstitialActivity" android:configChanges="orientation|screenSize"/>
+        <activity android:name="com.applovin.adview.AppLovinConfirmationActivity" android:configChanges="orientation|screenSize"/>
+
+        <activity android:name="com.mopub.mobileads.MoPubActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+
+        <activity android:name="com.mopub.mobileads.MraidActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+
+        <activity android:name="com.mopub.common.MoPubBrowser"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+
+        <activity android:name="com.mopub.mobileads.MraidVideoPlayerActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+
+        <activity android:name="com.mopub.mobileads.RewardedMraidActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
 
         <receiver
             android:name=".OnBroadcastService"
@@ -32,6 +54,12 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
+
+        <meta-data android:name="applovin.sdk.key"
+            android:value="W8azURRX7zflv5R0mx1hwocaR-5OEcollMiDp8mw5Pf_V60G21yyqZXGXcenERW-pDCbLyWRMBRsHR6JS2GHbo"  />
+
+        <meta-data android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version"/>
 
     </application>
 

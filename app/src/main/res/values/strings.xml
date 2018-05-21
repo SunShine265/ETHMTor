@@ -8,9 +8,9 @@
     <string name="current_hashrate">Current Hashrate</string>
     <string name="average_hashrate">Average Hashrate</string>
     <string name="worker">Worker</string>
-    <string name="reported_hashrate_highlight">Reported Hashrate:\u0020</string>
-    <string name="current_hashrate_highlight">Current Hashrate:\u0020</string>
-    <string name="average_hashrate_highlight">Average Hashrate:\u0020</string>
+    <string name="reported_hashrate_highlight">Reported:\u0020</string>
+    <string name="current_hashrate_highlight">Current:\u0020</string>
+    <string name="average_hashrate_highlight">Average:\u0020</string>
     <string name="worker_highlight">Worker:\u0020</string>
     <string name="hashrate">HASHRATE</string>
     <string name="shares">SHARES</string>
@@ -58,7 +58,26 @@
     <string name="unit_hashrate_eth">\u0020MH/s</string>
     <string name="time">Time:\u0020</string>
     <string name="title_id_suggestions">Most recently used wallet addresses:</string>
+    <string name="edit_by_eth_ethermine">Edit by ethermine.org</string>
+    <string name="edit_by_etc_ethermine">Edit by etc.ethermine.org</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="remove_ads">Remove Ads</string>
+    <string name="more_apps_my_us">More apps by us</string>
+    <string name="feedback_to_us">Feedback to us</string>
+    <string name="views_ads_to_donate">View &amp; click ads to donate us</string>
+    <string name="rate_us">Rate us 5 stars</string>
+    <string name="view_modes">View mode</string>
+    <string name="both_landscape_and_portrait">Both</string>
+    <string name="only_landscape">Landscape</string>
+    <string name="only_portrait">Portrait</string>
+    <string name="view_mode">View Mode:\u0020</string>
+
+    <!--view modes-->
+    <string-array name="view_modes">
+        <item>Both Landscape and Portrait</item>
+        <item>Only Landscape</item>
+        <item>Only Portrait</item>
+    </string-array>
 </resources>

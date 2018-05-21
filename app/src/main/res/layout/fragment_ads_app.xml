@@ -1,0 +1,284 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical"
+            android:paddingBottom="18dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+            <LinearLayout
+                android:id="@+id/view_modes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
+                android:layout_marginBottom="6dp">
+
+                <!--<ImageView-->
+                    <!--android:layout_width="30dp"-->
+                    <!--android:layout_height="30dp"-->
+                    <!--android:scaleType="fitCenter"-->
+                    <!--android:layout_marginLeft="10dp"-->
+                    <!--android:src="@drawable/view_modes" />-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/view_mode"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="14sp"/>
+                <RadioGroup
+                    android:id="@+id/rg_view_mode"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingBottom="6dp"
+                    android:paddingTop="6dp">
+
+                    <RadioButton
+                        android:id="@+id/both_landscape_portrait"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="5dp"
+                        android:text="@string/both_landscape_and_portrait"
+                        android:textColor="@color/colorWhite" />
+
+                    <RadioButton
+                        android:id="@+id/landscape"
+                        android:layout_width="wrap_content"
+                        android:textSize="14sp"
+                        android:layout_marginRight="5dp"
+                        android:layout_gravity="center"
+                        android:layout_height="wrap_content"
+                        android:text="@string/only_landscape"
+                        android:textColor="@color/colorWhite" />
+                    <RadioButton
+                        android:id="@+id/portrait"
+                        android:layout_width="wrap_content"
+                        android:textSize="14sp"
+                        android:layout_gravity="center"
+                        android:layout_height="wrap_content"
+                        android:text="@string/only_portrait"
+                        android:textColor="@color/colorWhite" />
+                </RadioGroup>
+                <!--<TextView-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="center_vertical"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:paddingLeft="20dp"-->
+                    <!--android:text="@string/view_modes"-->
+                    <!--android:textColor="@color/colorWhite"-->
+                    <!--android:textSize="18sp"-->
+                    <!--android:textStyle="bold" />-->
+
+                <!--<ImageView-->
+                    <!--android:layout_width="30dp"-->
+                    <!--android:layout_height="30dp"-->
+                    <!--android:scaleType="fitCenter"-->
+                    <!--android:src="@drawable/arrow_pointing" />-->
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/remove_app"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="6dp"
+                android:background="@drawable/gradient_background"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:paddingBottom="6dp"
+                android:paddingTop="6dp">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:scaleType="fitCenter"
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/remove_ads" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:text="@string/remove_ads"
+                    android:paddingLeft="5dp"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/arrow_pointing" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/rate_us"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="6dp"
+                android:background="@drawable/gradient_background"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:paddingBottom="6dp"
+                android:paddingTop="6dp">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:scaleType="fitCenter"
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/rate_us" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:paddingLeft="5dp"
+                    android:text="@string/rate_us"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/arrow_pointing" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/donate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="6dp"
+                android:background="@drawable/gradient_background"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:paddingBottom="6dp"
+                android:paddingTop="6dp">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:scaleType="fitCenter"
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/donate" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:paddingLeft="5dp"
+                    android:text="@string/views_ads_to_donate"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"                android:scaleType="fitCenter"
+                    android:src="@drawable/arrow_pointing" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/feedback"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="6dp"
+                android:background="@drawable/gradient_background"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:paddingBottom="6dp"
+                android:paddingTop="6dp">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:scaleType="fitCenter"
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/feadback" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:paddingLeft="5dp"
+                    android:text="@string/feedback_to_us"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/arrow_pointing" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/more_apps"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="6dp"
+                android:background="@drawable/gradient_background"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:paddingBottom="6dp"
+                android:paddingTop="6dp">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:scaleType="fitCenter"
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/more_apps" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:paddingLeft="5dp"
+                    android:text="@string/more_apps_my_us"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/arrow_pointing" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</FrameLayout>

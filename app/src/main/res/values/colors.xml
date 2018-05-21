@@ -2,8 +2,8 @@
 <resources>
     <color name="colorPrimary">#2A3D4E</color>
     <color name="background_selected">#364e63</color>
-    <color name="background_header">#1b2732</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="background_header">#2a3d4e</color>
+    <color name="colorPrimaryDark">#243442</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorBlack">#000</color>
@@ -26,4 +26,5 @@
     <color name="item_listview">#3E505E</color>
     <color name="transparent">#80000000</color>
     <color name="value_chart">#ccffffff</color>
+    <color name="color_press_primary">#FE7F0E</color>
 </resources>
