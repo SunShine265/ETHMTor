@@ -8,13 +8,13 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.BarChart;
@@ -32,7 +32,6 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.goodproductssoft.minningpool.CustomApp;
-import com.goodproductssoft.minningpool.HttpHandler;
 import com.goodproductssoft.minningpool.MyPreferences;
 import com.goodproductssoft.minningpool.R;
 import com.goodproductssoft.minningpool.WebService;
@@ -48,6 +47,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.TimeZone;
@@ -70,6 +70,7 @@ public class FragmentMiner extends Fragment  {
             month_usd, month_btc, eth_btc, eth_usd, chart_hashrate, chart_shares, time_next_payout,
             btc_usd, goal_day, unit_reported, unit_current, unit_average, title_unpaid, title_coin,
             title_coin_btc, title_coin_usd;
+    ScrollView scrollview_content_miner;
     View percent_next_payout, show_chart;
     private CurrentStats curentStats;
     private NetworkStats networkStats;
@@ -80,6 +81,7 @@ public class FragmentMiner extends Fragment  {
             yValueValidShares, yValueInValidShares, yValueStaleShares, yValueCurrentHashRateHighlight,
             yValueWorkerHighlight, yValueReportHashrateHighlight, yValueAverageHashrateHighlight;
     ArrayList<BarEntry> yValuesShares;
+
     long paidOn;
     double minPayout;
     int checkAccount;
@@ -146,6 +148,7 @@ public class FragmentMiner extends Fragment  {
         view_chart = (LinearLayout) view.findViewById(R.id.view_chart);
         price_coin = (LinearLayout) view.findViewById(R.id.price_coin);
         child_content_miner = (LinearLayout) view.findViewById(R.id.child_content_miner);
+        scrollview_content_miner = view.findViewById(R.id.scrollview_content_miner);
 
         curentStats = new CurrentStats();
         networkStats = new NetworkStats();
@@ -226,11 +229,17 @@ public class FragmentMiner extends Fragment  {
     private void CheckScreenOrientation(int orientation){
         if(getActivity() != null){
             if(orientation == Configuration.ORIENTATION_LANDSCAPE){
+                if(child_content_miner.getParent() instanceof ViewGroup) {
+                    ((ViewGroup) child_content_miner.getParent()).removeView(child_content_miner);
+                }
+                scrollview_content_miner.addView(child_content_miner);
+
+
                 ((ViewGroup)price_coin.getParent()).removeView(price_coin);
 
                 float uiScreenMin = Math.min(getResources().getDisplayMetrics().heightPixels, getResources().getDisplayMetrics().widthPixels);
                 float uiScreenMinDp = uiScreenMin / getResources().getDisplayMetrics().density;
-                float minHeight = 430;
+                float minHeight = 500;
 
                 if(chart_miner.getParent() != null){
                     ((ViewGroup)chart_miner.getParent()).removeView(chart_miner);
@@ -242,23 +251,33 @@ public class FragmentMiner extends Fragment  {
                         ((ViewGroup)price_coin.getParent()).removeView(price_coin);
                     }
                     child_content_miner.addView(price_coin);
+                    price_coin.setPadding(0, (int) (getResources().getDisplayMetrics().density * 4), 0, 0);
                 }
                 else {
                     if(price_coin.getParent() != null){
                         ((ViewGroup)price_coin.getParent()).removeView(price_coin);
                     }
                     chart_miner.addView(price_coin);
+                    price_coin.setPadding(0, 0, 0, 0);
                 }
 
                 LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 view_chart.setLayoutParams(p);
-                view_chart.setPadding(0,0,0,0);
+                chart_miner.setPadding((int) (getResources().getDisplayMetrics().density * 4), 0, 0, 0);
+
             }
             else {
+                if(child_content_miner.getParent() instanceof ViewGroup) {
+                    ((ViewGroup) child_content_miner.getParent()).removeView(child_content_miner);
+                }
+                ((ViewGroup) scrollview_content_miner.getParent()).addView(child_content_miner);
+
+
                 ((ViewGroup)chart_miner.getParent()).removeView(chart_miner);
                 view_chart.addView(chart_miner);
-                view_chart.setPadding(0, 0, 0, (int) (getResources().getDisplayMetrics().density * 5));
                 content_miner.removeView(chart_miner);
+                chart_miner.setPadding(0, 0, 0, 0);
+                price_coin.setPadding(0, (int) (getResources().getDisplayMetrics().density * 4), 0, 0);
 
                 if(price_coin.getParent() != null){
                     ((ViewGroup)price_coin.getParent()).removeView(price_coin);
@@ -278,26 +297,6 @@ public class FragmentMiner extends Fragment  {
 
         // Checks the orientation of the screen
         CheckScreenOrientation(newConfig.orientation);
-//        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-//            ((ViewGroup)chart_miner.getParent()).removeView(chart_miner);
-//            content_miner.addView(chart_miner);
-//            view_chart.removeView(chart_miner);
-//            ((ViewGroup)price_coin.getParent()).removeView(price_coin);
-//            chart_miner.addView(price_coin);
-//            child_content_miner.removeView(price_coin);
-//            LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-//            view_chart.setLayoutParams(p);
-//        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
-//            ((ViewGroup)chart_miner.getParent()).removeView(chart_miner);
-//            view_chart.addView(chart_miner);
-//            content_miner.removeView(chart_miner);
-//            ((ViewGroup)price_coin.getParent()).removeView(price_coin);
-//            child_content_miner.addView(price_coin);
-//            chart_miner.removeView(price_coin);
-//            LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0);
-//            p.weight = 1;
-//            view_chart.setLayoutParams(p);
-//        }
     }
 
     private void GetDataCurrentStats(){
@@ -424,6 +423,10 @@ public class FragmentMiner extends Fragment  {
                 .baseUrl(miner.getEndpoint())
                 .client(CustomApp.getHttpClient())
                 .build();
+        final ArrayList<Double> dbListReportHashrate = new ArrayList<Double>(),
+                dbListCurrentHashrrate = new ArrayList<Double>(),
+                dbListAverageHashrage = new ArrayList<Double>();
+        final ArrayList<Long> dbListTime = new ArrayList<Long>();
 
         WebService ws = retrofit.create(WebService.class);
         Call<ResponseBody> result = ws.GetHistory(miner.getId());
@@ -435,6 +438,7 @@ public class FragmentMiner extends Fragment  {
                     String jsonStr = response.body().string();
                     JSONObject jsonObj = new JSONObject(jsonStr);
                     JSONArray historys = jsonObj.getJSONArray("data");
+
                     if(historys != null && historys.length() > 0) {
                         for (int i = 0; i < historys.length(); i++) {
                             int value = i + 1;
@@ -495,15 +499,38 @@ public class FragmentMiner extends Fragment  {
                             float totalshares = (float) dbValidShare + (float) dbInValidShare + (float) dbStaleShare;
                             float percentInValid = ((float) dbInValidShare * 100) / totalshares;
                             float percentStale = ((float) dbStaleShare * 100) / totalshares;
+
+                            dbListReportHashrate.add(dbReportedHashrate);
+                            dbListCurrentHashrrate.add(dbCurrentHashrate);
+                            dbListAverageHashrage.add(dbAverageHashrate);
+                            dbListTime.add(time);
+
                             yValuesShares.add(new BarEntry(i, new float[]{percentStale, percentInValid}));
-                            yValueReportHashrate.add(new Entry(time, (float) ChangeHashrate(dbReportedHashrate)));
-                            yValueCurrentHashRate.add(new Entry(time, (float) ChangeHashrate(dbCurrentHashrate)));
-                            yValueAverageHashrate.add(new Entry(time, (float) ChangeHashrate(dbAverageHashrate)));
-                            yValueWorker.add(new Entry(time, dbWorker));
-                            yValueReportHashrateHighlight.add(new Entry(time, (float) dbReportedHashrate));
-                            yValueCurrentHashRateHighlight.add(new Entry(time, (float) dbCurrentHashrate));
-                            yValueAverageHashrateHighlight.add(new Entry(time, (float) dbAverageHashrate));
+
+                            yValueWorker.add(new Entry(time,  dbWorker));
+
                             yValueWorkerHighlight.add(new Entry(time, dbWorker));
+                        }
+
+                        double maxHashrate = 1;
+                        long hashrateUnit = 1;
+                        try {
+                            maxHashrate = Math.max(Math.max(Collections.max(dbListReportHashrate), Collections.max(dbListCurrentHashrrate)), Collections.max(dbListAverageHashrage));
+                            long maxUnit = 1000000000000l;
+                            while (maxHashrate > 1000 && hashrateUnit < maxUnit) {
+                                maxHashrate = maxHashrate / 1000;
+                                hashrateUnit = hashrateUnit * 1000;
+                            }
+                        }catch (Exception ex){}
+
+                        for (int i = 0; i < dbListReportHashrate.size(); i++) {
+                            yValueReportHashrate.add(new Entry(dbListTime.get(i), (float) (dbListReportHashrate.get(i)/ hashrateUnit)));
+                            yValueCurrentHashRate.add(new Entry(dbListTime.get(i), (float) (dbListCurrentHashrrate.get(i) / hashrateUnit)));
+                            yValueAverageHashrate.add(new Entry(dbListTime.get(i), (float) (dbListAverageHashrage.get(i) / hashrateUnit)));
+
+                            yValueReportHashrateHighlight.add(new Entry(dbListTime.get(i), (float) (dbListReportHashrate.get(i) / 1)));
+                            yValueCurrentHashRateHighlight.add(new Entry(dbListTime.get(i), (float) (dbListCurrentHashrrate.get(i) / 1)));
+                            yValueAverageHashrateHighlight.add(new Entry(dbListTime.get(i), (float) (dbListAverageHashrage.get(i) / 1)));
                         }
                     }
                     else {
@@ -514,6 +541,7 @@ public class FragmentMiner extends Fragment  {
                 }
 
                 responses.put("GetHistory", true);
+
                 ShowResult(responses);
             }
 
@@ -616,19 +644,21 @@ public class FragmentMiner extends Fragment  {
                 if(getListener() != null){
                     getListener().hideProgress();
                 }
-//                if(responses.get("isConnectError")){
-//                    CustomApp.showToast("Couldn't get data from server!");
-//                }
+
+                if(responses.get("isConnectError")){
+                    CustomApp.showToast("Couldn't get data from server!");
+                }
                 else if(responses.get("isNoData")){
                     String urlTypeCoin = "";
                     if(miner.getType().equals(Miner.CoinType.ETH)){
-                        urlTypeCoin = "https://ethpool.org/";
+                        urlTypeCoin = "https://ethermine.org";
                     }
                     else if(miner.getType().equals(Miner.CoinType.ETC)){
                         urlTypeCoin = "https://etc.ethermine.org";
                     }
-                    else
-                        urlTypeCoin = "https://zcash.flypool.org/";
+                    else {
+                        urlTypeCoin = "https://zcash.flypool.org";
+                    }
 
                     AlertDialog alertDialog = new AlertDialog.Builder(activity).create();
                     alertDialog.setTitle("No Data");
@@ -699,7 +729,7 @@ public class FragmentMiner extends Fragment  {
 //                unit_current.setText(getString(R.string.unit_hashrate_etc));
 //                unit_average.setText(getString(R.string.unit_hashrate_etc));
                 title_unpaid.setText(getString(R.string.etc));
-                title_coin.setText(getString(R.string.etc));
+                title_coin.setText(getString(R.string.etc_title));
                 title_coin_btc.setText(R.string.etc_btc);
                 title_coin_usd.setText(R.string.etc_usd);
             }
@@ -709,7 +739,7 @@ public class FragmentMiner extends Fragment  {
 //                unit_current.setText(getString(R.string.unit_hashrate_eth));
 //                unit_average.setText(getString(R.string.unit_hashrate_eth));
                 title_unpaid.setText(getString(R.string.eth));
-                title_coin.setText(getString(R.string.eth));
+                title_coin.setText(getString(R.string.eth_title));
                 title_coin_btc.setText(R.string.eth_btc);
                 title_coin_usd.setText(R.string.eth_usd);
             }
@@ -718,23 +748,19 @@ public class FragmentMiner extends Fragment  {
     private void DrawGraphHashRate(Activity activity){
         lineChart.setDragEnabled(true);
         lineChart.getDescription().setEnabled(false);
-
-        Legend legend = lineChart.getLegend();
-        legend.setWordWrapEnabled(true);
+        lineChart.setScaleEnabled(false);
 
         YAxis leftAxis = lineChart.getAxisLeft();
         leftAxis.setTextColor(Color.WHITE);
-        lineChart.setScaleEnabled(false);
+        leftAxis.resetAxisMinimum();
 
         YAxis axisRight = lineChart.getAxisRight();
         axisRight.setGranularity(1f);
         axisRight.setDrawGridLines(false);
+        axisRight.setTextColor(Color.WHITE);
+        axisRight.resetAxisMinimum();
 
-//        lineChart.getXAxis().setTextColor(Color.TRANSPARENT);
-        lineChart.getAxisRight().setTextColor(Color.WHITE);
-        lineChart.getLegend().setTextColor(Color.WHITE);
-
-        LineDataSet lineReported = new LineDataSet(yValueReportHashrate, "Reported Hashrate");
+        LineDataSet lineReported = new LineDataSet(yValueReportHashrate, getString(R.string.reported_hashrate));
         lineReported.setFillAlpha(2);
         lineReported.setColor(getResources().getColor(R.color.chart_reported_hashrate));
         lineReported.setCircleRadius(1);
@@ -742,7 +768,7 @@ public class FragmentMiner extends Fragment  {
         lineReported.setLineWidth(0.4f);
         lineReported.setValueTextColor(Color.TRANSPARENT);
 
-        LineDataSet lineCurrent = new LineDataSet(yValueCurrentHashRate, "Current Hashrate");
+        LineDataSet lineCurrent = new LineDataSet(yValueCurrentHashRate, getString(R.string.current_hashrate));
         lineCurrent.setFillAlpha(2);
         lineCurrent.setColor(getResources().getColor(R.color.chart_current_hashrate));
         lineCurrent.setCircleRadius(1);
@@ -750,7 +776,7 @@ public class FragmentMiner extends Fragment  {
         lineCurrent.setLineWidth(0.4f);
         lineCurrent.setValueTextColor(Color.TRANSPARENT);
 
-        LineDataSet lineAverage = new LineDataSet(yValueAverageHashrate, "Average Hashrate");
+        LineDataSet lineAverage = new LineDataSet(yValueAverageHashrate, getString(R.string.average_hashrate));
         lineAverage.setFillAlpha(2);
         lineAverage.setColor(getResources().getColor(R.color.chart_average_hashrate));
         lineAverage.setCircleRadius(1);
@@ -758,17 +784,17 @@ public class FragmentMiner extends Fragment  {
         lineAverage.setLineWidth(0.4f);
         lineAverage.setValueTextColor(Color.TRANSPARENT);
 
-        LineDataSet lineWorker = new LineDataSet(yValueWorker, "Active Workers");
+        LineDataSet lineWorker = new LineDataSet(yValueWorker, getString(R.string.workers));
         lineWorker.setMode(LineDataSet.Mode.LINEAR);
-        lineWorker.setColor(Color.parseColor("#AA0000"));
+        lineWorker.setColor(getResources().getColor(R.color.chart_worker));
         lineWorker.setDrawCircles(false);
         lineWorker.setDrawCircleHole(false);
-        lineWorker.setLineWidth(0.6f);
+        lineWorker.setLineWidth(0.7f);
         lineWorker.setAxisDependency(YAxis.AxisDependency.RIGHT);
 
         XAxis xAxis = lineChart.getXAxis();
         xAxis.setTextColor(getResources().getColor(R.color.colorWhite));
-        lineChart.getXAxis().setAxisMinimum(timeHistory.get(1));
+        xAxis.setAxisMinimum(timeHistory.get(1));
         xAxis.setValueFormatter(new IAxisValueFormatter() {
 
             @Override
@@ -789,12 +815,34 @@ public class FragmentMiner extends Fragment  {
 
         LineData data = new LineData(dataSets);
         lineChart.setData(data);
-        lineChart.invalidate();
-            lineChart.setDrawMarkers(true);
-            CustomMarkerView customMarkerView = new CustomMarkerView(activity,
-                    R.layout.custom_marker_view_layout, yValueReportHashrateHighlight, yValueCurrentHashRateHighlight,
-                    yValueAverageHashrateHighlight, yValueWorkerHighlight);
-            lineChart.setMarker(customMarkerView);
+//        lineChart.setClipChildren(false);
+//        lineChart.setClipValuesToContent(false);
+//        lineChart.setClipToPadding(false);
+//        if(axisRight.getAxisMinimum() < 0) {
+//            axisRight.setAxisMinimum(0);
+//        }
+//        if(leftAxis.getAxisMinimum() < 0) {
+//            leftAxis.setAxisMinimum(0);
+//        }
+
+        lineChart.setDrawMarkers(true);
+        CustomMarkerView customMarkerView = new CustomMarkerView(activity, lineChart,
+                R.layout.custom_marker_view_layout, yValueReportHashrateHighlight, yValueCurrentHashRateHighlight,
+                yValueAverageHashrateHighlight, yValueWorkerHighlight);
+        lineChart.setMarker(customMarkerView);
+
+        Legend legend = lineChart.getLegend();
+        legend.setXEntrySpace(12f);
+        legend.setTextSize(11f);
+        legend.setTextColor(Color.WHITE);
+        legend.setWordWrapEnabled(true);
+
+        lineChart.post(new Runnable() {
+            @Override
+            public void run() {
+                lineChart.invalidate();
+            }
+        });
     }
 
     private String ConvertTimestampToTime(long time) {
@@ -807,6 +855,7 @@ public class FragmentMiner extends Fragment  {
     }
 
     private void DrawGraphShares(){
+
         barChart.removeAllViews();
         barChart.setDragEnabled(true);
         //barChart.getDescription().setEnabled(false);
@@ -814,6 +863,10 @@ public class FragmentMiner extends Fragment  {
         barChart.setScaleEnabled(false);
         barChart.setSelected(false);
 
+        Legend legend = barChart.getLegend();
+        legend.setWordWrapEnabled(true);
+        legend.setXEntrySpace(12f);
+        legend.setTextSize(11f);
 
 //        barChart.getXAxis().setTextColor(Color.TRANSPARENT);
         barChart.getAxisRight().setTextColor(Color.TRANSPARENT);
@@ -866,12 +919,6 @@ public class FragmentMiner extends Fragment  {
         return colors;
     }
 
-//    private void SetViewBottom(){
-//        eth_usd.setText(new DecimalFormat("#.#").format(networkStats.getEthUsd()));
-//        eth_btc.setText(new DecimalFormat("#.####").format(networkStats.getEthBtc()));
-//        btc_usd.setText(new DecimalFormat("#.#").format(networkStats.getEthUsd()/networkStats.getEthBtc()));
-//    }
-
     private void SetView(){
         reported_hashrate.setText(curentStats.getReportedHashrate());
         current_hashrate.setText(curentStats.getCurrentHashrate());
@@ -885,355 +932,23 @@ public class FragmentMiner extends Fragment  {
         valid_shares.setText(String.valueOf(curentStats.getValidShares() +"(" + new DecimalFormat("###.#").format(percentValid) + "%)"));
         invalid_shares.setText(String.valueOf(curentStats.getInvalidShares() +"(" + new DecimalFormat("###.#").format(percentInValid) + "%)"));
         stale_shares.setText(String.valueOf(curentStats.getStaleShares() +"(" + new DecimalFormat("###.#").format(percentStale) + "%)"));
-        last_screen.setText(String.valueOf(curentStats.getLastSeen()));
-        hour_eth.setText(new DecimalFormat("#.####").format(curentStats.getCoinsPerHr()));
-        hour_btc.setText(new DecimalFormat("#.####").format(curentStats.getBtcPerMin()));
+        last_screen.setText(String.valueOf(curentStats.getLastSeen()) + " m");
+        hour_eth.setText(new DecimalFormat("#.#####").format(curentStats.getCoinsPerHr()));
+        hour_btc.setText(new DecimalFormat("#.#####").format(curentStats.getBtcPerMin()));
         hour_usd.setText(new DecimalFormat("#.##").format(curentStats.getUsdPerMin()));
-        day_eth.setText(new DecimalFormat("#.####").format(curentStats.getCoinsPerHr()*24));
-        day_btc.setText(new DecimalFormat("#.####").format(curentStats.getBtcPerMin()*24));
+        day_eth.setText(new DecimalFormat("#.#####").format(curentStats.getCoinsPerHr()*24));
+        day_btc.setText(new DecimalFormat("#.#####").format(curentStats.getBtcPerMin()*24));
         day_usd.setText(new DecimalFormat("#.##").format(curentStats.getUsdPerMin()*24));
-        week_eth.setText(new DecimalFormat("#.####").format(curentStats.getCoinsPerHr()*24*7));
-        week_btc.setText(new DecimalFormat("#.####").format(curentStats.getBtcPerMin()*24*7));
+        week_eth.setText(new DecimalFormat("#.#####").format(curentStats.getCoinsPerHr()*24*7));
+        week_btc.setText(new DecimalFormat("#.#####").format(curentStats.getBtcPerMin()*24*7));
         week_usd.setText(new DecimalFormat("#.##").format(curentStats.getUsdPerMin()*24*7));
-        month_eth.setText(new DecimalFormat("#.####").format(curentStats.getCoinsPerHr()*24*30));
-        month_btc.setText(new DecimalFormat("#.####").format(curentStats.getBtcPerMin()*24*30));
-        month_usd.setText(new DecimalFormat("#.####").format(curentStats.getUsdPerMin()*24*30));
+        month_eth.setText(new DecimalFormat("#.#####").format(curentStats.getCoinsPerHr()*24*30));
+        month_btc.setText(new DecimalFormat("#.#####").format(curentStats.getBtcPerMin()*24*30));
+        month_usd.setText(new DecimalFormat("#.##").format(curentStats.getUsdPerMin()*24*30));
         eth_usd.setText(new DecimalFormat("#.#").format(curentStats.getPriceEthUsd()));
-        eth_btc.setText(new DecimalFormat("#.####").format(curentStats.getPriceEthbtc()));
+        eth_btc.setText(new DecimalFormat("#.#####").format(curentStats.getPriceEthbtc()));
         btc_usd.setText(new DecimalFormat("#.#").format(curentStats.getPriceBtcUsd()));
         NextPayout();
-    }
-
-    /**
-     * Async task class to get json by making HTTP call
-     */
-    private class GetAPI extends AsyncTask<String, Void, Void> {
-        boolean isNoData = false;
-        boolean isParsingError = false;
-
-        //int flag = -1;
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            // Showing progress dialog
-            //progressbar.setVisibility(View.VISIBLE);
-            if(getListener() != null){
-                getListener().showProgress();
-            }
-        }
-
-        @Override
-        protected Void doInBackground(String... url) {
-            HttpHandler sh = new HttpHandler();
-            final  Activity activity = getActivity();
-            // Making a request to url and getting response
-            String jsonStr = sh.makeServiceCall(url[0]);
-
-            if (jsonStr != null) {
-                try {
-                    JSONObject jsonObj = new JSONObject(jsonStr);
-
-                    // Getting JSON Array node
-                    if(activity != null && jsonObj.get("data").equals(NO_DATA)){
-                        isNoData = true;
-                    }
-                    else {
-                        JSONObject data = jsonObj.getJSONObject("data");
-                        long reported, current, average, unpaidBalance;
-                        double coinsPerMin, usdPerMin, btcPerMin;
-                        int workers, lastScreen, validShares, invalidShares, staleShares;
-                        try {
-                            reported = data.getLong("reportedHashrate");
-                        } catch (JSONException e) {
-                            reported = 0;
-                        }
-                        try {
-                            current = data.getLong("currentHashrate");
-                        } catch (JSONException e) {
-                            current = 0;
-                        }
-                        try {
-                            average = data.getLong("averageHashrate");
-                        } catch (JSONException e) {
-                            average = 0;
-                        }
-                        try {
-                            unpaidBalance = data.getLong("unpaid");
-                        } catch (JSONException e) {
-                            unpaidBalance = 0;
-                        }
-                        try {
-                            workers = data.getInt("activeWorkers");
-                        } catch (JSONException e) {
-                            workers = 0;
-                        }
-                        try {
-                            lastScreen = data.getInt("lastSeen");
-                        } catch (JSONException e) {
-                            lastScreen = 0;
-                        }
-                        try {
-                            validShares = data.getInt("validShares");
-                        } catch (JSONException e) {
-                            validShares = 0;
-                        }
-                        try {
-                            invalidShares = data.getInt("invalidShares");
-                        } catch (JSONException e) {
-                            invalidShares = 0;
-                        }
-                        try {
-                            staleShares = data.getInt("staleShares");
-                        } catch (JSONException e) {
-                            staleShares = 0;
-                        }
-                        try {
-                            coinsPerMin = data.getDouble("coinsPerMin");
-                        } catch (JSONException e) {
-                            coinsPerMin = 0;
-                        }
-                        try {
-                            usdPerMin = data.getDouble("usdPerMin");
-                        } catch (JSONException e) {
-                            usdPerMin = 0;
-                        }
-                        try {
-                            btcPerMin = data.getDouble("btcPerMin");
-                        } catch (JSONException e) {
-                            btcPerMin = 0;
-                        }
-
-                        curentStats.setPriceEthbtc(btcPerMin / coinsPerMin);
-                        curentStats.setPriceEthUsd(usdPerMin / coinsPerMin);
-                        curentStats.setPriceBtcUsd(usdPerMin / btcPerMin);
-                        curentStats.setReportedHashrate(reported);
-                        curentStats.setCurrentHashrate(current);
-                        curentStats.setAverageHashrate(average);
-                        curentStats.setUnpaid(unpaidBalance);
-                        curentStats.setActiveWorkers(workers);
-                        curentStats.setLastSeen(lastScreen);
-                        curentStats.setValidShares(validShares);
-                        curentStats.setInvalidShares(invalidShares);
-                        curentStats.setStaleShares(staleShares);
-                        curentStats.setCoinsPerMin(coinsPerMin);
-                        curentStats.setBtcPerMin(btcPerMin);
-                        curentStats.setUsdPerMin(usdPerMin);
-                    }
-                } catch (final JSONException e) {
-                    if(activity != null) {
-                        isParsingError = true;
-                    }
-                }
-            } else {
-                if(activity != null) {
-                    activity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            CustomApp.showToast("Couldn't get data from server!");
-                        }
-                    });
-                }
-                return null;
-            }
-
-            String jsonNetworkHistory = sh.makeServiceCall(url[1]);
-            if (jsonNetworkHistory != null) {
-                try {
-                    JSONObject jsonObj = new JSONObject(jsonNetworkHistory);
-                    JSONArray historys = jsonObj.getJSONArray("data");
-                    if(historys != null && historys.length() > 0) {
-                        for (int i = 0; i < historys.length(); i++) {
-                            int value = i + 1;
-                            JSONObject valueJson = historys.getJSONObject(i);
-                            double dbReportedHashrate;
-                            try {
-                                dbReportedHashrate = valueJson.getDouble("reportedHashrate");
-                            } catch (JSONException e) {
-                                dbReportedHashrate = 0;
-                            }
-                            //double dbconvertReportedHashrate = (double) dbReportedHashrate / 1000000;
-
-                            double dbCurrentHashrate;
-                            try {
-                                dbCurrentHashrate = valueJson.getDouble("currentHashrate");
-                            } catch (JSONException e) {
-                                dbCurrentHashrate = 0;
-                            }
-                            //double dbconvertCurrentHashrate = (double) dbCurrentHashrate / 1000000;
-
-                            double dbAverageHashrate;
-                            try {
-                                dbAverageHashrate = valueJson.getDouble("averageHashrate");
-                            } catch (JSONException e) {
-                                dbAverageHashrate = 0;
-                            }
-                            //double dbconvertAverageHashrate = (double) dbAverageHashrate / 1000000;
-
-                            long dbWorker;
-                            try {
-                                dbWorker = (long) valueJson.getDouble("activeWorkers");
-                            } catch (JSONException e) {
-                                dbWorker = 0;
-                            }
-                            double dbValidShare;
-                            try {
-                                dbValidShare = valueJson.getDouble("validShares");
-                            } catch (JSONException e) {
-                                dbValidShare = 0;
-                            }
-                            double dbInValidShare;
-                            try {
-                                dbInValidShare = valueJson.getDouble("invalidShares");
-                            } catch (JSONException e) {
-                                dbInValidShare = 0;
-                            }
-                            double dbStaleShare;
-                            try {
-                                dbStaleShare = valueJson.getDouble("staleShares");
-                            } catch (JSONException e) {
-                                dbStaleShare = 0;
-                            }
-
-                            long time;
-                            try {
-                                time = valueJson.getLong("time");
-                            } catch (JSONException e) {
-                                time = 0;
-                            }
-                            timeHistory.put(i + 1, time);
-                            float totalshares = (float) dbValidShare + (float) dbInValidShare + (float) dbStaleShare;
-                            //float percentValid = ((float)dbValidShare*100) / totalshares;
-                            float percentInValid = ((float) dbInValidShare * 100) / totalshares;
-                            float percentStale = ((float) dbStaleShare * 100) / totalshares;
-                            yValuesShares.add(new BarEntry(i, new float[]{percentStale, percentInValid}));
-//                        yValueValidShares.add(new Entry(i, (float)dbValidShare));
-//                        yValueInValidShares.add(new Entry(i, (float)dbInValidShare));
-//                        yValueStaleShares.add(new Entry(i, (float)dbStaleShare));
-                            yValueReportHashrate.add(new Entry(time, (float) ChangeHashrate(dbReportedHashrate)));
-                            yValueCurrentHashRate.add(new Entry(time, (float) ChangeHashrate(dbCurrentHashrate)));
-                            yValueAverageHashrate.add(new Entry(time, (float) ChangeHashrate(dbAverageHashrate)));
-                            yValueWorker.add(new Entry(time, dbWorker));
-                            yValueReportHashrateHighlight.add(new Entry(time, (float) dbReportedHashrate));
-                            yValueCurrentHashRateHighlight.add(new Entry(time, (float) dbCurrentHashrate));
-                            yValueAverageHashrateHighlight.add(new Entry(time, (float) dbAverageHashrate));
-                            yValueWorkerHighlight.add(new Entry(time, dbWorker));
-                        }
-                    }
-                    else {
-                        isNoData = true;
-                    }
-                } catch (final JSONException e) {
-                    isParsingError = true;
-                }
-            } else {
-                if(activity != null) {
-                    activity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            CustomApp.showToast("Couldn't get data from server!");
-                        }
-                    });
-                }
-                return null;
-            }
-
-            String jsonPayouts = sh.makeServiceCall(url[2]);
-            if (jsonPayouts != null) {
-                try {
-                    JSONObject jsonObj = new JSONObject(jsonPayouts);
-                    JSONArray payoutsArray = jsonObj.getJSONArray("data");
-                    if(payoutsArray != null && payoutsArray.length() > 0) {
-                        JSONObject valueJson = payoutsArray.getJSONObject(0);
-                        paidOn = valueJson.getLong("paidOn");
-                    }
-                    else {
-                        isNoData = true;
-                    }
-                } catch (final JSONException e) {
-                    isParsingError = true;
-                }
-            } else {
-                if(activity != null) {
-                    activity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            CustomApp.showToast("Couldn't get data from server!");
-                        }
-                    });
-                }
-                return null;
-            }
-
-            String jsonSettings = sh.makeServiceCall(url[3]);
-            if (jsonSettings != null) {
-                try {
-                    JSONObject jsonObj = new JSONObject(jsonSettings);
-                    if(jsonObj.get("data").equals(NO_DATA)){
-                        isNoData = true;
-                    }
-                    else {
-                        JSONObject settings = jsonObj.getJSONObject("data");
-                        minPayout = settings.getDouble("minPayout") / 1000000000;
-                        minPayout = minPayout / 1000000000;
-                    }
-                } catch (final JSONException e) {
-                    isParsingError = true;
-                }
-            } else {
-                if(activity != null) {
-                    activity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            CustomApp.showToast("Couldn't get data from server!");
-                        }
-                    });
-                }
-                return null;
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            super.onPostExecute(result);
-            final Activity activity = getActivity();
-
-            if(isNoData){
-                if(activity != null) {
-                    activity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            CustomApp.showToast("No data");
-                        }
-                    });
-                }
-            }
-            else if(isParsingError){
-                if(activity != null) {
-                    activity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            CustomApp.showToast("Data error");
-                        }
-                    });
-                }
-            }
-
-            if (isAdded() && activity != null) {
-                SetView();
-                // Draw line chart
-                if(yValueAverageHashrate.size() > 0 && yValueReportHashrate.size() > 0 && yValueCurrentHashRate.size() > 0) {
-                    lineChart.setVisibility(View.VISIBLE);
-                    barChart.setVisibility(View.GONE);
-                    DrawGraphHashRate(activity);
-                }
-            }
-//            progressbar.setVisibility(View.GONE);
-            if(getListener() != null){
-                getListener().hideProgress();
-            }
-        }
     }
 
     public String ChangeHashrateUnit(long value){
@@ -1283,7 +998,7 @@ public class FragmentMiner extends Fragment  {
             Date date = new java.util.Date(time*1000L);
             Calendar cal = Calendar.getInstance();
             TimeZone tz = cal.getTimeZone();//get your local time zone.
-            SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM, hh:mm");
+            SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM, HH:mm");
             sdf.setTimeZone(tz);//set time zone.
             String formattedDate = sdf.format(date);
             return formattedDate;
@@ -1302,7 +1017,7 @@ public class FragmentMiner extends Fragment  {
         long dayGoal = (long)resultSeconds + now;
 
         if((dayGoal - paidOn) >  7 * 24 * 60 * 60){
-            dayGoal = paidOn + 7 * 24 * 60 * 60 + 60 * 4;
+            dayGoal = paidOn + 7 * 24 * 60 * 60 + 60 * 5;
             resultSeconds = dayGoal - now;
         }
 
@@ -1322,23 +1037,30 @@ public class FragmentMiner extends Fragment  {
             strNextPayout += minute + "m";
         }
         double secondsEstimate = MinNumber(estimateDay, 7)*86400;
-        double percent = 100-((resultSeconds*100)/secondsEstimate);
-        float f = (float)percent/100;
-//        ViewGroup.LayoutParams lp = percent_next_payout.getLayoutParams();
-//        lp.height = ((View)percent_next_payout.getParent()).getHeight();
-//        lp.width = (int) (((View)percent_next_payout.getParent()).getWidth() * f);
-//        percent_next_payout.setLayoutParams(lp);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
-        lp.weight = f;
-        percent_next_payout.setLayoutParams(lp);
+        double percent = 100 - ((resultSeconds*100)/secondsEstimate);
+        float f = Math.min(1f, (float)percent/100f);
+
         final double finalResultSeconds = resultSeconds;
         final String finalStrGoal = strGoal;
         final String finalStrNextPayout = strNextPayout;
-        if(finalResultSeconds >= 0 && curentStats.getCoinsPerHr() > 0) {
+        if(curentStats.getCoinsPerHr() > 0 && f == 1f){
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
+            lp.weight = f;
+            percent_next_payout.setLayoutParams(lp);
+            goal_day.setText("Done, waiting for payment");
+            time_next_payout.setText("");
+        }
+        else if(finalResultSeconds >= 0 && curentStats.getCoinsPerHr() > 0) {
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
+            lp.weight = f;
+            percent_next_payout.setLayoutParams(lp);
             goal_day.setText(finalStrGoal);
             time_next_payout.setText(finalStrNextPayout);
         }
         else {
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
+            lp.weight = 0;
+            percent_next_payout.setLayoutParams(lp);
             goal_day.setText("");
             time_next_payout.setText("");
         }

@@ -6,9 +6,7 @@ import android.net.NetworkInfo;
 import android.support.multidex.MultiDexApplication;
 import android.widget.Toast;
 
-import com.applovin.sdk.AppLovinSdk;
 import com.goodproductssoft.minningpool.util.IabHelper;
-import com.google.android.gms.ads.MobileAds;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,9 +24,9 @@ import okhttp3.Response;
 public class CustomApp extends MultiDexApplication {
     private static CustomApp instance = null;
 
-    final static String ADMOB_APP_ID = "ca-app-pub-1827062885697339~6560780679";
+    public static final String ADMOB_APP_ID = "ca-app-pub-1827062885697339~6560780679";
     public static final String ADS_ITEM_SKU = "com.goodproductssoft.removeads";
-    String base64EncodedPublicKey =
+    public static final String base64EncodedPublicKey =
             "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAizsJsRCr9FfvY0kFdavuGjJpEdX1aktVmR5q78mSHquHVHxZHtXo/WzD8heFkfNuaAaPLVyvKfLK6n4j7z+IKzm+yM7ZBdGgJ9BrMZcTT0wk3UfyKKeYCPu7RzYVfAU17CAYlKhhw8Bvr2FN5gyuiyPTgPV1STX4+tz8w92R+rE7GjTV3PetGhPmKMviNAwBHCe+03eghNXXZJ1qKZK7/682KyUPRboe8TdND1jEmUaI9I6aMOcCwMbPMpkz3JcCKFhRCzdizMNvlxcqCMHNyj0v6kSxVoW6vSjzq7CdTovBx2eC9aKVbW+9Mjnm/Lxg5afW9eWPjhZ1TooLXfubtwIDAQAB";
 
     public final static CustomApp getInstance() {
@@ -39,10 +37,6 @@ public class CustomApp extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         instance = this;
-
-        MobileAds.initialize(this, ADMOB_APP_ID);
-        AppLovinSdk.initializeSdk(this);
-
 
         //List<String> networksToInit = new ArrayList<String>();
         //networksToInit.add("MainActivity.java");

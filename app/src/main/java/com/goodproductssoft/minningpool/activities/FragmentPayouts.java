@@ -129,7 +129,7 @@ public class FragmentPayouts extends Fragment {
     private String getDate(long time) {
         Calendar cal = Calendar.getInstance();
         TimeZone tz = cal.getTimeZone();//get your local time zone.
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         sdf.setTimeZone(tz);//set time zone.
         String localTime = sdf.format(new Date(time*1000));
         String strDate="";

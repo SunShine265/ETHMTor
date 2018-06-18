@@ -289,7 +289,6 @@ public class FragmentPoolSettings extends Fragment {
         }
         result.enqueue(new Callback<ResponseBody>() {
             private boolean isCheckSuccess = false;
-
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {

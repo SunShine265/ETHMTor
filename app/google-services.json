@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "338776030211",
+    "firebase_url": "https://ethermine-pool-monitor.firebaseio.com",
+    "project_id": "ethermine-pool-monitor",
+    "storage_bucket": "ethermine-pool-monitor.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:338776030211:android:159fe78597568b79",
+        "android_client_info": {
+          "package_name": "com.goodproductssoft.minningpool"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "338776030211-jicav9ko1hevqmubr9f3f80tf7b4gktv.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "338776030211-jicav9ko1hevqmubr9f3f80tf7b4gktv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBatpO__lziz4Aq-6rmMJQhStIiAqZGweI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

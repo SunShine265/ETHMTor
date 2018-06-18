@@ -30,7 +30,7 @@ import java.util.TimeZone;
 public class CustomMarkerView extends MarkerView {
     TextView value_report, value_current, value_average, value_worker, timer;
     ArrayList<Entry> yValueReports, yValueCurrents, yValueAverages, yValueWorkers;
-    private int uiScreenWidth, uiScreenHeight;
+    Chart mChart;
 
     /**
      * Constructor. Sets up the MarkerView with a custom layout resource.
@@ -38,7 +38,7 @@ public class CustomMarkerView extends MarkerView {
      * @param activity
      * @param layoutResource the layout resource to use for the MarkerView
      */
-    public CustomMarkerView(final Activity activity, int layoutResource, ArrayList<Entry> valueReports,
+    public CustomMarkerView(final Activity activity, Chart chart, int layoutResource, ArrayList<Entry> valueReports,
                             ArrayList<Entry> valueCurrents, ArrayList<Entry> valueAverages,
                             ArrayList<Entry> valueWorkers) {
         super(activity, layoutResource);
@@ -51,8 +51,8 @@ public class CustomMarkerView extends MarkerView {
         this.yValueCurrents = valueCurrents;
         this.yValueAverages = valueAverages;
         this.yValueWorkers = valueWorkers;
-        uiScreenWidth = getResources().getDisplayMetrics().widthPixels;
-        uiScreenHeight = getResources().getDisplayMetrics().heightPixels;
+
+        mChart = chart;
 
         ViewTreeObserver viewTreeObserver = CustomMarkerView.this.getViewTreeObserver();
         if (viewTreeObserver.isAlive()) {
@@ -135,31 +135,29 @@ public class CustomMarkerView extends MarkerView {
 
     @Override
     public void draw(Canvas canvas, float posX, float posY) {
-//        int w = getWidth();
-//        if((uiScreenWidth-posX-60) < w) {
-//            posX -= w;
-//        }
-//        posY = 100;
-//        canvas.translate(posX, posY);
-//        draw(canvas);
         Context activity = CustomMarkerView.this.getContext();
         if(activity != null){
+            int uiChartWidth = 0;
+            try {
+                uiChartWidth = canvas.getClipBounds().width();//getResources().getDisplayMetrics().widthPixels;
+            } catch (Exception ex){ }
+
             if(activity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
                 int w = getWidth();
-                if(((((uiScreenWidth)*3)/7)-posX - 45) < w) {
+                if(posX > uiChartWidth / 2) {
                     posX -= w;
                 }
                 posY = 100;
-                canvas.translate(posX, posY);
+                canvas.translate(Math.max(0, posX), posY);
                 draw(canvas);
             }
             else {
                 int w = getWidth();
-                if((uiScreenWidth-posX) - 90 < w) {
+                if(posX > uiChartWidth / 2) {
                     posX -= w;
                 }
                 posY = 100;
-                canvas.translate(posX, posY);
+                canvas.translate(Math.max(0, posX), posY);
                 draw(canvas);
             }
         }

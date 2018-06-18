@@ -108,15 +108,15 @@ public class YourWorkerAdapter extends ArrayAdapter<YourWorker> {
         String strTempValue = "H/s";
         if(value / 1000 >= 1){
             double lTempHS = value / 1000;
-            strTempValue = " KH/s";
+            strTempValue = "KH/s";
             if(lTempHS / 1000 >= 1){
                 double lTempKH = lTempHS / 1000;
-                strTempValue = " MH/s";
+                strTempValue = "MH/s";
                 if(lTempKH / 1000 >= 1){
                     double lTempMH = lTempKH / 1000;
-                    strTempValue =  " GH/s";
+                    strTempValue =  "GH/s";
                     if(lTempMH / 1000 >= 1){
-                        strTempValue = " TH/s";
+                        strTempValue = "TH/s";
                     }
                 }
             }

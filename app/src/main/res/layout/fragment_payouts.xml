@@ -28,9 +28,9 @@
                     android:layout_height="match_parent"
                     android:layout_marginRight="1dp"
                     android:layout_weight="2"
-                    android:background="@color/color_worker"
+                    android:background="@color/color_title_listview"
                     android:gravity="center"
-                    android:text="@string/your_payouts"
+                    android:text="@string/paid_on"
                     android:textColor="@color/colorWhite"
                     android:textSize="10dp"
                     android:textStyle="bold" />
@@ -41,7 +41,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginRight="1dp"
                     android:layout_weight="1"
-                    android:background="@color/color_worker"
+                    android:background="@color/color_title_listview"
                     android:gravity="center"
                     android:text="@string/duration"
                     android:textColor="@color/colorWhite"
@@ -52,8 +52,8 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginRight="1dp"
-                    android:layout_weight="2"
-                    android:background="@color/color_worker"
+                    android:layout_weight="1.9"
+                    android:background="@color/color_title_listview"
                     android:gravity="center"
                     android:text="@string/TxHash"
                     android:textColor="@color/colorWhite"
@@ -63,8 +63,8 @@
                     android:id="@+id/last_screen"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.7"
-                    android:background="@color/color_worker"
+                    android:layout_weight="0.8"
+                    android:background="@color/color_title_listview"
                     android:gravity="center"
                     android:text="@string/eth_title"
                     android:textColor="@color/colorWhite"
@@ -142,7 +142,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:layout_marginRight="1dp"
-                    android:layout_weight="2"
+                    android:layout_weight="1.9"
                     android:background="#7E7F81"
                     android:gravity="center"
                     android:orientation="horizontal">
@@ -166,11 +166,11 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginRight="1dp"
-                    android:layout_weight="0.7"
+                    android:layout_weight="0.8"
                     android:background="#7E7F81"
                     android:gravity="center"
                     android:textColor="@color/colorWhite"
-                    android:textSize="10dp" />
+                    android:textSize="10sp" />
             </LinearLayout>
 
             <View

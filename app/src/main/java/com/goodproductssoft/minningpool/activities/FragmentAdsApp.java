@@ -58,7 +58,7 @@ public class FragmentAdsApp extends Fragment {
         mHelper.startSetup(new
                                IabHelper.OnIabSetupFinishedListener() {
                                    public void onIabSetupFinished(IabResult result) {
-                                       if (result.isSuccess()) {
+                                       if (result != null && result.isSuccess()) {
                                            try {
                                                ArrayList<String> items = new ArrayList<>();
                                                items.add(CustomApp.ADS_ITEM_SKU);

@@ -30,9 +30,6 @@ public class IdMinerAdapter extends ArrayAdapter<Miner> {
     ArrayList<Miner> data;
     TextView title_coin;
     Context context;
-    MyPreferences myPreferences;
-    ArrayList<Miner> miners;
-    Miner minerIsActive;
 
     static String endpointEth = "https://api.ethermine.org";
     public IdMinerAdapter(@NonNull Context context, ArrayList<Miner> data) {
@@ -47,7 +44,7 @@ public class IdMinerAdapter extends ArrayAdapter<Miner> {
         if(convertView == null){
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_id_miner, parent, false);
         }
-        Miner item = data.get(position);
+        final Miner item = data.get(position);
         TextView id_miner, email, payout, ip, title_type_coin, edit_miner_settings;
         ImageView btn_delete_id_miner;
         Switch id_on_off_notification;
@@ -63,9 +60,6 @@ public class IdMinerAdapter extends ArrayAdapter<Miner> {
         id_on_off_notification = convertView.findViewById(R.id.id_on_off_notification);
         id_send_email = convertView.findViewById(R.id.id_send_email);
         edit_miner_settings = convertView.findViewById(R.id.edit_miner_settings);
-        myPreferences = MyPreferences.getInstance();
-        miners = myPreferences.GetIdMiners();
-        minerIsActive = GetMinerIdActive();
 
         //id_miner.setText(item.getId());
         String urlTxHash = "";
@@ -94,33 +88,28 @@ public class IdMinerAdapter extends ArrayAdapter<Miner> {
             title_coin.setText(context.getString(R.string.etc));
         }
 
-        if(id_on_off_notification.isChecked()){
-            minerIsActive.setNotification(true);
-            myPreferences.UpdateMiner(minerIsActive);
-        }
-        else {
-            minerIsActive.setNotification(false);
-            myPreferences.UpdateMiner(minerIsActive);
-        }
         //update Ui switch
         if(item.isNotification()){
             id_on_off_notification.setChecked(true);
         }
-        else
+        else {
             id_on_off_notification.setChecked(false);
+        }
+
         id_on_off_notification.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if(isChecked){
-                    minerIsActive.setNotification(true);
-                    myPreferences.UpdateMiner(minerIsActive);
+                    item.setNotification(true);
+                    MyPreferences.getInstance().UpdateMiner(item);
                 }
                 else {
-                    minerIsActive.setNotification(false);
-                    myPreferences.UpdateMiner(minerIsActive);
+                    item.setNotification(false);
+                    MyPreferences.getInstance().UpdateMiner(item);
                 }
             }
         });
+
         email.setText(item.getSettings().getEmail());
         ip.setText(item.getSettings().getIp());
         payout.setText(String.valueOf(item.getSettings().getPayout()));
@@ -156,16 +145,5 @@ public class IdMinerAdapter extends ArrayAdapter<Miner> {
         }
         edit_miner_settings.setMovementMethod(LinkMovementMethod.getInstance());
         return convertView;
-    }
-
-    private Miner GetMinerIdActive(){
-        if(miners != null && !miners.isEmpty()) {
-            for (int i = 0; i < miners.size(); i++) {
-                if (miners.get(i).isActive()) {
-                    return miners.get(i);
-                }
-            }
-        }
-        return null;
     }
 }

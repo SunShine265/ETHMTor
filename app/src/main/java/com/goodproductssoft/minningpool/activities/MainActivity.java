@@ -9,11 +9,13 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.applovin.mediation.ApplovinAdapter;
+import com.applovin.sdk.AppLovinSdk;
 import com.goodproductssoft.minningpool.CustomApp;
 import com.goodproductssoft.minningpool.MyPreferences;
 import com.goodproductssoft.minningpool.OnBroadcastService;
@@ -52,6 +54,8 @@ import java.util.Random;
 
 import static com.google.android.gms.ads.AdSize.BANNER;
 import static com.google.android.gms.ads.AdSize.FULL_BANNER;
+import static com.google.android.gms.ads.AdSize.LARGE_BANNER;
+import static com.google.android.gms.ads.AdSize.LEADERBOARD;
 import static com.google.android.gms.ads.AdSize.SMART_BANNER;
 
 //import com.mopub.mobileads.MoPubErrorCode;
@@ -72,9 +76,12 @@ public class MainActivity extends AppCompatActivity implements FragmentMiner.Pro
     private RewardedVideoAd rewardedVideoAd;
 //    com.facebook.ads.AdView adViewFacebook;
 
+    private static final String ADMOB_AD_UNIT_ID_BANNER = "ca-app-pub-1827062885697339/3931937276";
+    private static final String ADMOB_AD_UNIT_ID_LEADERBOARD = "ca-app-pub-1827062885697339/5704398884";
     private static final String ADMOB_AD_UNIT_ID_INTERSTITIAL = "ca-app-pub-1827062885697339/8801120573";
     private static final String ADMOB_AD_UNIT_ID_REWARDEDVIDEO = "ca-app-pub-1827062885697339/8995372320";
-    public final static int MAX_SHOW_ADS_REMAIN_TIMES = 20;
+
+    public final static int MAX_SHOW_ADS_REMAIN_TIMES = 19;
     public final static int MIN_SHOW_ADS_REMAIN_TIMES = 15;
     public final static boolean IS_SHOW_ADS = true;
     public final static int SHOW_RATE_REMAIN_TIMES = 20;
@@ -86,6 +93,11 @@ public class MainActivity extends AppCompatActivity implements FragmentMiner.Pro
         super.onCreate(savedInstanceState);
 
         UIHandler = new Handler();
+
+        try {
+            MobileAds.initialize(this, CustomApp.ADMOB_APP_ID);
+            AppLovinSdk.initializeSdk(this);
+        } catch (Exception ex){ }
 
         setContentView(R.layout.activity_main);
 
@@ -104,15 +116,15 @@ public class MainActivity extends AppCompatActivity implements FragmentMiner.Pro
         final IabHelper mHelper = CustomApp.getInstance().createIaHelper();
         mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
                                    public void onIabSetupFinished(IabResult result) {
-                                       if (result.isSuccess()) {
+                                       if (result != null && result.isSuccess()) {
                                            try {
                                                ArrayList<String> items = new ArrayList<>();
                                                items.add(CustomApp.ADS_ITEM_SKU);
                                                mHelper.queryInventoryAsync(new IabHelper.QueryInventoryFinishedListener() {
                                                            @Override
                                                            public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
-                                                               try {
-                                                                   if (inventory.hasPurchase(CustomApp.ADS_ITEM_SKU)) {
+                                                       try {
+                                                           if (inventory.hasPurchase(CustomApp.ADS_ITEM_SKU)) {
 //                                                   //Remove purchase for test devices
 //                                                   Purchase premiumPurchase = inventory.getPurchase(CustomApp.ADS_ITEM_SKU);
 //                                                   mHelper.consumeAsync(premiumPurchase, new IabHelper.OnConsumeFinishedListener() {
@@ -120,19 +132,17 @@ public class MainActivity extends AppCompatActivity implements FragmentMiner.Pro
 //                                                       public void onConsumeFinished(Purchase purchase, IabResult result) {
 //                                                       }
 //                                                   });
-                                                                       MyPreferences myPreferences = MyPreferences.getInstance();
-                                                                       myPreferences.setRemoveAds(true);
-                                                                       hideBannerAds();
-                                                                   } else {
-                                                                       MyPreferences myPreferences = MyPreferences.getInstance();
-                                                                       myPreferences.setRemoveAds(false);
-                                                                   }
-                                                               }
-                                                               catch (Exception ex){}
+                                                               MyPreferences myPreferences = MyPreferences.getInstance();
+                                                               myPreferences.setRemoveAds(true);
+                                                               hideBannerAds();
+                                                           } else {
+                                                               MyPreferences myPreferences = MyPreferences.getInstance();
+                                                               myPreferences.setRemoveAds(false);
                                                            }
-                                                       });
-
-
+                                                       }
+                                                       catch (Exception ex){}
+                                                           }
+                                               });
                                            }
                                            catch (Exception ex){
                                            }
@@ -152,7 +162,6 @@ public class MainActivity extends AppCompatActivity implements FragmentMiner.Pro
         tab_payouts = findViewById(R.id.tab_payouts);
         tab_workers = findViewById(R.id.tab_workers);
         tab_miner = findViewById(R.id.tab_miner);
-//        mAdView = findViewById(R.id.adView);
         id_ads_app = findViewById(R.id.id_ads_app);
         icon_app = findViewById(R.id.icon_app);
         title_app = findViewById(R.id.title_app);
@@ -263,21 +272,8 @@ public class MainActivity extends AppCompatActivity implements FragmentMiner.Pro
 
 //        checkGooglePlayServices();
 
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        try {
-            if (IS_SHOW_ADS && !MyPreferences.getInstance().getRemoveAds()) {
-                if (timeBanner == null || timeBanner.getTime() + 1000 * 3600 < Calendar.getInstance().getTime().getTime()
-                        ||  mAdView == null || mAdView.getVisibility() == View.GONE || mAdView.getHeight() == 0) {
-                    showBannerAds();
-                }
-            }
-        }
-        catch (Exception ex){
-        }
+        setViewMode();
+        showAds();
     }
 
 //    private void setMopubBannerAds() {
@@ -463,14 +459,6 @@ public class MainActivity extends AppCompatActivity implements FragmentMiner.Pro
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        if(IS_SHOW_ADS && !MyPreferences.getInstance().getRemoveAds()){
-            showBannerAds();
-        }
-    }
-
-    @Override
     public void showProgress(){
         progressbar.setVisibility(View.VISIBLE);
     }
@@ -480,51 +468,127 @@ public class MainActivity extends AppCompatActivity implements FragmentMiner.Pro
         progressbar.setVisibility(View.GONE);
     }
 
+    private boolean isPaused = false;
+    @Override
+    protected void onResume() {
+        super.onResume();
+        try {
+            isPaused = false;
+            if (IS_SHOW_ADS && !MyPreferences.getInstance().getRemoveAds()) {
+                if (findViewById(R.id.adView).getHeight() == 0 ||
+                        timeBanner == null || timeBanner.getTime() + 1000 * 3600 < Calendar.getInstance().getTime().getTime()
+                    //||  mAdView == null || mAdView.getVisibility() == View.GONE || mAdView.getHeight() == 0
+                        ) {
+                    showBannerAds();
+                }
+            }
+        }
+        catch (Exception ex){
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        isPaused = true;
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        isPaused = true;
+        super.onStop();
+        try {
+//            if (mAdView != null && mAdView.getParent() != null) {
+//                mAdView.setVisibility(View.GONE);
+//                ((ViewGroup)(mAdView.getParent())).removeView(mAdView);
+//                mAdView.destroy();
+//            }
+        }
+        catch (Exception e){}
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if(IS_SHOW_ADS && !MyPreferences.getInstance().getRemoveAds()){
+            ViewGroup adViews = (ViewGroup)findViewById(R.id.adView);
+            try {
+                for (int i = 0; i < adViews.getChildCount(); i++) {
+                    AdView adView = (AdView) adViews.getChildAt(i);
+                    adView.setVisibility(View.GONE);
+//                    adView.destroy();
+                }
+            } catch (Exception ex){}
+            adViews.removeAllViews();
+            showBannerAds();
+        }
+    }
+
     public void hideBannerAds() {
-       if(mAdView != null) {
+        try {
+            ViewGroup adViews = (ViewGroup)findViewById(R.id.adView);
+            adViews.removeAllViews();
+        } catch (Exception ex){}
+        if(mAdView != null) {
             mAdView.setVisibility(View.GONE);
-       }
+        }
     }
 
     private void showBannerAds() {
         showBannerAds(SMART_BANNER);
     }
 
-    private AdSize bannerSizeLoading = null;
-    private Date timeBanner = Calendar.getInstance().getTime();
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        try {
-            if (mAdView != null) {
-                mAdView.setVisibility(View.GONE);
-            }
-        }
-        catch (Exception e){}
+    private void showBannerAds(final AdSize adSize) {
+        showBannerAds(adSize, false);
     }
 
-    private void showBannerAds(final AdSize adSize){
+    private Date timeBanner = Calendar.getInstance().getTime();
+    private long refreshTimes = 40 * 1000;
+
+    private void showBannerAds(final AdSize adSize, boolean useBannerId){
         //TODO: Ads primary
         try {
-            if (mAdView != null) {
-                mAdView.destroy();
-                mAdView = null;
-            }
+//            if (mAdView != null) {
+//                mAdView.destroy();
+//                mAdView.setVisibility(View.GONE);
+//                mAdView = null;
+//            }
         }
         catch (Exception ex){}
         timeBanner = Calendar.getInstance().getTime();
+
         mAdView = new AdView(this);
         final AdView adViewFinal = mAdView;
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(adSize == BANNER || adSize == LEADERBOARD? adSize.getWidthInPixels(this) : ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
         adViewFinal.setLayoutParams(layoutParams);
-        ((ViewGroup)findViewById(R.id.adView)).removeAllViews();
         ((ViewGroup)findViewById(R.id.adView)).addView(adViewFinal);
-
-        adViewFinal.setAdSize(adSize);
-        adViewFinal.setAdUnitId("ca-app-pub-1827062885697339/3931937276");
         adViewFinal.setVisibility(View.GONE);
+        adViewFinal.setAdSize(adSize);
+
+        float uiScreenWidth = getResources().getDisplayMetrics().widthPixels;
+        final float uiScreenWidthDp = uiScreenWidth / getResources().getDisplayMetrics().density;
+        float uiScreenHeight = getResources().getDisplayMetrics().heightPixels;
+        final float uiScreenHeightDp = uiScreenHeight / getResources().getDisplayMetrics().density;
+
+        if (useBannerId){
+            adViewFinal.setAdUnitId(ADMOB_AD_UNIT_ID_BANNER);
+        }
+        else {
+            if(adSize == SMART_BANNER) {
+                if (uiScreenWidthDp >= 730 && uiScreenHeightDp > 720) {
+                    adViewFinal.setAdUnitId(ADMOB_AD_UNIT_ID_LEADERBOARD);
+                } else {
+                    adViewFinal.setAdUnitId(ADMOB_AD_UNIT_ID_BANNER);
+                }
+            } else if (adSize == LEADERBOARD) {
+                adViewFinal.setAdUnitId(ADMOB_AD_UNIT_ID_LEADERBOARD);
+            } else {
+                adViewFinal.setAdUnitId(ADMOB_AD_UNIT_ID_BANNER);
+            }
+        }
+
+
 //
         //TODO: bundle for AppLovin banners
         Bundle bundleAppLovin = new Bundle();
@@ -539,43 +603,166 @@ public class MainActivity extends AppCompatActivity implements FragmentMiner.Pro
 ////                .build();
 //
         AdRequest adRequest = new AdRequest.Builder()
-                .addNetworkExtrasBundle(ApplovinAdapter.class, bundleAppLovin)
-                .addNetworkExtrasBundle(MoPubAdapter.class, bundleMopub)
-//            .addNetworkExtrasBundle(FacebookAdapter.class, extras)
-//            .addCustomEventExtrasBundle(AppLovinCustomEventBanner.class, bundleAppLovin )
+                //.addNetworkExtrasBundle(ApplovinAdapter.class, bundleAppLovin)
+                //.addNetworkExtrasBundle(MoPubAdapter.class, bundleMopub)
                 .build();
-//
-        bannerSizeLoading = adSize;
+
+        final AdSize[] bannerSizeLoading = {adSize};
+
         adViewFinal.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
-                bannerSizeLoading = null;
+                bannerSizeLoading[0] = null;
                 if (!MyPreferences.getInstance().getRemoveAds()) {
-                    adViewFinal.setVisibility(View.VISIBLE);
+                    ViewGroup adViews = (ViewGroup)findViewById(R.id.adView);
+                    boolean isOutSize = false;
+                    try{
+                        isOutSize = adViews.getWidth() + 100 < adViewFinal.getAdSize().getWidthInPixels(MainActivity.this);
+                    } catch (Exception ex){ }
+
+                    if(isOutSize){
+                        try {
+                            adViewFinal.setVisibility(View.GONE);
+                            adViews.removeView(adViewFinal);
+                        } catch (Exception ex){ }
+                        Log.d("Ads" , "banner outsize: " +
+                                (adViewFinal.getMediationAdapterClassName() != null? adViewFinal.getMediationAdapterClassName() + " " : "")
+                                + adViewFinal.getAdSize().toString());
+                    }
+                    else {
+                        try {
+                            ArrayList<View> removeViews = new ArrayList<>();
+                            boolean isAdded = false;
+                            for (int i = 0; i < adViews.getChildCount(); i++) {
+                                try {
+                                    AdView adView = (AdView) adViews.getChildAt(i);
+                                    if (adViewFinal != adView) {
+                                        adView.setVisibility(View.GONE);
+                                        removeViews.add(adView);
+//                                adView.destroy();
+                                    } else {
+                                        isAdded = true;
+                                    }
+                                } catch (Exception exRemove){
+                                }
+                            }
+                            if(!isAdded) {
+                                adViews.addView(adViewFinal);
+                            }
+                            for (View removeView: removeViews) {
+                                adViews.removeView(removeView);
+                            }
+                        } catch (Exception ex){}
+
+                        adViewFinal.setVisibility(View.VISIBLE);
+                        adViewFinal.bringToFront();
+
+                        Log.d("Ads" , "banner show: " +
+                                (adViewFinal.getMediationAdapterClassName() != null? adViewFinal.getMediationAdapterClassName() + " " : "")
+                                + adViewFinal.getAdSize().toString());
+                    }
+                } else {
+                    adViewFinal.setVisibility(View.GONE);
+                    ((ViewGroup)findViewById(R.id.adView)).removeAllViews();
                 }
             }
 
             @Override
             public void onAdFailedToLoad(int errorCode) {
-                adViewFinal.setVisibility(View.GONE);
-                if(errorCode == 3){
-                    if(adViewFinal.getParent() != null) {
-                        if(bannerSizeLoading == null){
-                            showBannerAds(SMART_BANNER);
-                        } else if (bannerSizeLoading == SMART_BANNER) {
-                            showBannerAds(BANNER);
-                        } else if (bannerSizeLoading == BANNER) {
-                            float uiScreenMin = getResources().getDisplayMetrics().widthPixels;
-                            float uiScreenMinDp = uiScreenMin / getResources().getDisplayMetrics().density;
-                            if(uiScreenMinDp >= 480) {
-                                showBannerAds(FULL_BANNER);
+                try {
+                    if (adViewFinal.getParent() != null) {
+                        AdSize currentBannerSizeLoading = bannerSizeLoading[0];
+                        try {
+                            if((adViewFinal.getVisibility() == View.VISIBLE && adViewFinal.getHeight() > 0)) {
+                                currentBannerSizeLoading = null;
+                            }
+                            else if(((ViewGroup) findViewById(R.id.adView)).getChildCount() > 1 &&
+                                    (adViewFinal.getVisibility() == View.GONE || adViewFinal.getHeight() == 0)) {
+                                adViewFinal.setVisibility(View.GONE);
+                                ((ViewGroup) findViewById(R.id.adView)).removeView(adViewFinal);
+//                                adViewFinal.destroy();
+                            }
+                        } catch (Exception ex) {
+                        }
+
+                        if(isPaused) {
+                            timeBanner = null;
+                            return;
+                        }
+
+                        if (errorCode == AdRequest.ERROR_CODE_NO_FILL) {
+                            if (currentBannerSizeLoading == null) {
+                                showBannerAds(SMART_BANNER);
+                            } else if (currentBannerSizeLoading == SMART_BANNER) {
+                                if (ADMOB_AD_UNIT_ID_LEADERBOARD.equals(adViewFinal.getAdUnitId())) {
+                                    showBannerAds(SMART_BANNER, true);
+                                } else {
+                                    if (uiScreenWidthDp >= 730) {
+                                        showBannerAds(LEADERBOARD);
+                                    } else {
+                                        showBannerAds(BANNER);
+                                    }
+                                }
+                            } else if (currentBannerSizeLoading == LEADERBOARD) {
+                                showBannerAds(BANNER);
+                            } else if (currentBannerSizeLoading == BANNER) {
+                                if (uiScreenWidthDp >= 470) {
+                                    showBannerAds(FULL_BANNER);
+                                } else {
+                                    if (uiScreenHeightDp >= 680) {
+                                        showBannerAds(LARGE_BANNER);
+                                    } else {
+                                        UIHandler.postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                refreshBannerAds(adViewFinal);
+                                            }
+                                        }, refreshTimes);
+                                    }
+                                }
+                            } else if (currentBannerSizeLoading == FULL_BANNER) {
+                                if (uiScreenHeightDp >= 680) {
+                                    showBannerAds(LARGE_BANNER);
+                                } else {
+                                    UIHandler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            refreshBannerAds(adViewFinal);
+                                        }
+                                    }, refreshTimes);
+                                }
                             } else {
-                                showAds();
+                                UIHandler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        refreshBannerAds(adViewFinal);
+                                    }
+                                }, refreshTimes);
                             }
                         } else {
-                            showAds();
+                            UIHandler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    refreshBannerAds(adViewFinal);
+                                }
+                            }, refreshTimes);
                         }
+                    } else {
+                        UIHandler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                refreshBannerAds(adViewFinal);
+                            }
+                        }, refreshTimes);
                     }
+                }
+                catch(Exception ex) {
+                    UIHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            refreshBannerAds(adViewFinal);
+                        }
+                    }, refreshTimes);
                 }
             }
 
@@ -603,101 +790,33 @@ public class MainActivity extends AppCompatActivity implements FragmentMiner.Pro
             }
         });
         adViewFinal.loadAd(adRequest);
-
-        //TODO: AppLovinAds
-//        final AppLovinAdView adView = new AppLovinAdView( AppLovinAdSize.BANNER, this );
-//
-//        ((ViewGroup)findViewById(R.id.adView)).removeAllViews();
-//        ((ViewGroup)findViewById(R.id.adView)).addView(adView);
-//
-//        adView.setLayoutParams( new RelativeLayout.LayoutParams( ViewGroup.LayoutParams.MATCH_PARENT, com.applovin.sdk.AppLovinSdkUtils.dpToPx( this, AppLovinAdSize.BANNER.getHeight() ) ) );
-//        adView.setAdDisplayListener(new AppLovinAdDisplayListener() {
-//            @Override
-//            public void adDisplayed(AppLovinAd appLovinAd) {
-//
-//            }
-//
-//            @Override
-//            public void adHidden(AppLovinAd appLovinAd) {
-//
-//            }
-//        });
-//        adView.setAdLoadListener(new AppLovinAdLoadListener() {
-//            @Override
-//            public void adReceived(AppLovinAd appLovinAd) {
-//            }
-//
-//            @Override
-//            public void failedToReceiveAd(int i) {
-//
-//            }
-//        });
-//
-//
-//        // Load an ad!
-//        adView.loadNextAd();
-
-//        // Load an Interstitial Ad
-//        AppLovinSdk.getInstance( this ).getAdService().loadNextAd( AppLovinAdSize.INTERSTITIAL, new AppLovinAdLoadListener()
-//        {
-//            @Override
-//            public void adReceived(AppLovinAd ad)
-//            {
-//                AppLovinInterstitialAdDialog interstitialAd = AppLovinInterstitialAd.create( AppLovinSdk.getInstance( MainActivity.this ), MainActivity.this );
-//
-////                interstitialAd.setAdDisplayListener( ... );
-////                interstitialAd.setAdClickListener( ... );
-////                interstitialAd.setAdVideoPlaybackListener( ... );
-//
-//                interstitialAd.showAndRender( ad );
-//            }
-//
-//            @Override
-//            public void failedToReceiveAd(int errorCode)
-//            {
-//                // Look at AppLovinErrorCodes.java for list of error codes.
-//            }
-//        } );
-
-
-//        //TODO: test mopub
-//        MoPubView mMoPubView = new MoPubView(this);
-//        mMoPubView.setAdUnitId("23678b141dd746d0aa10379ebc2970e6"); // Enter your Ad Unit ID from www.mopub.com
-////      mMoPubView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-//        mMoPubView.loadAd();
-//        mMoPubView.setBannerAdListener(new MoPubView.BannerAdListener() {
-//            @Override
-//            public void onBannerLoaded(MoPubView banner) {
-//
-//            }
-//
-//            @Override
-//            public void onBannerFailed(MoPubView banner, MoPubErrorCode errorCode) {
-//
-//            }
-//
-//            @Override
-//            public void onBannerClicked(MoPubView banner) {
-//
-//            }
-//
-//            @Override
-//            public void onBannerExpanded(MoPubView banner) {
-//
-//            }
-//
-//            @Override
-//            public void onBannerCollapsed(MoPubView banner) {
-//
-//            }
-//        });
-//
-//        ((ViewGroup)findViewById(R.id.adView)).removeAllViews();
-//        ((ViewGroup)findViewById(R.id.adView)).addView(mMoPubView);
-
-
     }
 
+    public void refreshBannerAds(AdView adView){
+        try {
+            if(isPaused) {
+                timeBanner = null;
+                return;
+            }
+
+            boolean isShowing = findViewById(R.id.adView).getHeight() > 0;
+            if (IS_SHOW_ADS && !MyPreferences.getInstance().getRemoveAds()) {
+                if(!isShowing) {
+                    ((ViewGroup)findViewById(R.id.adView)).removeAllViews();
+                    showBannerAds();
+                }
+                else if(adView != null && adView.getParent() != null
+//                    && adView.getVisibility() == View.GONE
+//                    && !adView.isLoading()
+//                    && adView == mAdView)
+                        ) {
+                    showBannerAds();
+                }
+
+            }
+        }
+        catch (Exception ex){}
+    }
 
     public boolean checkGooglePlayServices() {
         GoogleApiAvailabilityLight googleApiAvailability = GoogleApiAvailabilityLight.getInstance();
@@ -716,9 +835,6 @@ public class MainActivity extends AppCompatActivity implements FragmentMiner.Pro
 
     @Override
     protected void onDestroy() {
-//        if (adViewFacebook != null) {
-//            adViewFacebook.destroy();
-//        }
         super.onDestroy();
     }
 
@@ -744,12 +860,12 @@ public class MainActivity extends AppCompatActivity implements FragmentMiner.Pro
                 if (remainTimes > 0) {
                     myPreferences.setShowAdsRemainTimes(remainTimes - 1);
                 } else if (!lockedAds && UIHandler != null) {
+                    lockedAds = true;
                     long remainAdsTimes = myPreferences.getShowRateRemainTimes();
                     if (remainAdsTimes > 0) {
                         myPreferences.setShowRateRemainTimes(Math.max(remainAdsTimes, 6));
                     }
 
-                    lockedAds = true;
                     UIHandler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -760,12 +876,12 @@ public class MainActivity extends AppCompatActivity implements FragmentMiner.Pro
                                     public void run() {
                                         lockedAds = false;
                                     }
-                                }, 6000);
+                                }, 10000);
                             } catch (Exception ex) {
                                 lockedAds = false;
                             }
                         }
-                    }, 4000);
+                    }, 2000);
                 }
             }
         }
@@ -878,7 +994,20 @@ public class MainActivity extends AppCompatActivity implements FragmentMiner.Pro
         }
     }
 
-
+    private void setViewMode(){
+        int mode = MyPreferences.getInstance().getViewModes();
+        switch (mode){
+            case 0:
+                MainActivity.this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+                break;
+            case 1:
+                MainActivity.this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                break;
+            case 2:
+                MainActivity.this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                break;
+        }
+    }
 
 //    private void setBannerAdsFacebook(){
 //        adViewFacebook = new com.facebook.ads.AdView(this, "1885266801771264_1885266888437922", com.facebook.ads.AdSize.BANNER_HEIGHT_50);
